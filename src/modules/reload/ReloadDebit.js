@@ -6,7 +6,8 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 // import { Shadow, Colors } from 'theme';
 // import Icon from "react-native-vector-icons/Entypo";
 import SelectableGrid from "react-native-selectable-grid";
-// import Button from 'common/Button';
+import Button from "../common/Button";
+
 // import I18n from 'config/i18n';
 
 // import styles from './styles';
@@ -34,15 +35,6 @@ import SelectableGrid from "react-native-selectable-grid";
 //   item: PropTypes.object.isRequired,
 // };
 
-const fakeData = [
-  { amount: "3" },
-  { amount: "5" },
-  { amount: "10" },
-  { amount: "20" },
-  { amount: "50" },
-  { amount: "100" }
-];
-
 const ReloadDebit = ({ store }) => {
   const cellRender = (data, cellStyles) => (
     <View style={cellStyles.cellContainer}>
@@ -61,7 +53,7 @@ const ReloadDebit = ({ store }) => {
           // ref={ref => {
           //   this.sbRef = ref;
           // }}
-          data={fakeData}
+          data={store.presetReloadAmount}
           maxPerRow={3}
           unselectedRender={data => cellRender(data, styles)}
           selectedRender={data => cellRender(data, selectedStyles)}
@@ -71,6 +63,7 @@ const ReloadDebit = ({ store }) => {
             borderBottomWidth: 1,
             borderColor: "grey"
           }}
+          onSelect={v => store.action.selectReloadAmount(v)}
           selectedStyle={{
             backgroundColor: store.state.themeColor,
             borderColor: store.state.themeColor
@@ -78,12 +71,12 @@ const ReloadDebit = ({ store }) => {
         />
       </ScrollView>
       <View style={styles.buttonContainer}>
-        {/* <Button
-        style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
-        label={I18n.t("walletReload.continueText")}
-        // disabled={invalid}
-        onPress={() => alert(JSON.stringify(this.sbRef.selectedData()))}
-      /> */}
+        <Button
+          style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
+          label={"CONTINUE"}
+          disabled={!store.select.didSelectReloadAmount()}
+          // onPress={() => alert(JSON.stringify(this.sbRef.selectedData()))}
+        />
       </View>
     </View>
   );
@@ -110,7 +103,8 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   buttonContainer: {
-    paddingVertical: 10
+    paddingVertical: 10,
+    marginBottom: 10
   }
 });
 

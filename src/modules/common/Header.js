@@ -8,6 +8,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import PropTypes from "prop-types";
+import Arrow from "react-native-arrow";
 import Resolution from "../../style/Resolution";
 
 const STATUS_BAR_HEIGHT =
@@ -46,11 +47,7 @@ const Header = ({
                   onLeftIconPressed();
                 }}
               >
-                {/* <Icon
-                  color={type !== "dark" ? Colors.oxfordBlue : Colors.white}
-                  size={25}
-                  name={leftIcon}
-                /> */}
+                <Arrow size={14} />
               </TouchableOpacity>
             )}
             <Text style={[styles.title, titleStyle]}>{title}</Text>

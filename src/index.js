@@ -10,7 +10,8 @@ class App extends Component {
       routes: [Routes[0]],
       themeColor: props.themeColor,
       currency: props.currency,
-      balance: props.balance
+      balance: props.balance,
+      selectedReloadAmount: null
     };
   }
   navigation = {
@@ -25,18 +26,29 @@ class App extends Component {
     },
     goBack: () => {
       const { routes } = this.state;
-      if (routes.length > 0) {
+      if (routes.length > 1) {
         routes.pop();
         this.setState({ routes });
+      } else {
+        this.props.onExit();
       }
-    }
+    },
+    onExit: this.props.onExit
   };
 
   select = {
-    balance: () => (this.state.balance / 100).toFixed(2)
+    balance: () => (this.state.balance / 100).toFixed(2),
+    didSelectReloadAmount: () => this.state.selectedReloadAmount != null
+  };
+  action = {
+    set: (s, v) => this.setState({ [s]: v }),
+    selectReloadAmount: v =>
+      this.setState({ selectedReloadAmount: this.props.presetReloadAmount[v] })
   };
 
   render() {
+    console.log(this.state);
+    const { presetReloadAmount } = this.props;
     const { routes } = this.state;
     const screens = [];
     for (let i = 0; i < routes.length; i += 1) {
@@ -46,7 +58,9 @@ class App extends Component {
             store: {
               navigation: this.navigation,
               state: this.state,
-              select: this.select
+              select: this.select,
+              action: this.action,
+              presetReloadAmount
             }
           })}
         </View>
@@ -75,13 +89,22 @@ App.propTypes = {
   onExit: PropTypes.func,
   themeColor: PropTypes.string,
   currency: PropTypes.string,
-  balance: PropTypes.number
+  balance: PropTypes.number,
+  presetReloadAmount: PropTypes.array
 };
 
 App.defaultProps = {
   onExit: () => null,
   themeColor: "#3B4A5C",
   currency: "MYR",
-  balance: 0
+  balance: 0,
+  presetReloadAmount: [
+    { amount: "3" },
+    { amount: "5" },
+    { amount: "10" },
+    { amount: "20" },
+    { amount: "50" },
+    { amount: "100" }
+  ]
 };
 export default App;

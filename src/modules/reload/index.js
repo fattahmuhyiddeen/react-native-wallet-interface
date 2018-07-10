@@ -4,33 +4,17 @@ import NavBar from "../common/Header";
 import PropTypes from "prop-types";
 import Resolution from "../../style/Resolution";
 // import ScrollableTabView from 'react-native-scrollable-tab-view';
-// import { openMapApp } from 'utils/links';
-// import { Colors, Resolution } from "theme";
-// import { Icon, Button as NBButton } from "native-base";
-// import FeatherIcons from "react-native-vector-icons/Feather";
-// import { makeSelectHotspotsNearMe } from "selectors/wifi/apSelector";
-// import isEmpty from "lodash/isEmpty";
-// import I18n from "config/i18n";
 import ReloadDebit from "./ReloadDebit";
 // import ReloadSoftPin from "./ReloadSoftPin";
 // import ReloadTabBar from "./ReloadTabBar";
-
-// Ducks
-// import * as tabActions from 'ducks/nav/tab/tabActions';
-// import * as wifiScanActions from "ducks/scanner/scan";
-
-// Sagas
-// import CurrentBalance from "modules/balance";
-
-// Analytics
-
 const height = Resolution.screenHeight;
 
 const buttonSize = Resolution.isTablet ? 200 : Resolution.deviceWidth * 0.4;
 
 class WalletReloadScreen extends Component {
   render() {
-    const { navigation, state, select } = this.props.store;
+    const { store } = this.props;
+    const { navigation, state, select } = store;
     const { themeColor, currency, balance } = state;
 
     return (
@@ -56,13 +40,13 @@ class WalletReloadScreen extends Component {
             <Text style={{ color: "white", fontSize: 35 }}>
               {currency + " " + select.balance()}
             </Text>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text style={styles.plus}>+</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <View style={styles.reloadMethodView}>
-          <ReloadDebit store={this.props.store} tabLabel="Reload wallet" />
+          <ReloadDebit store={store} tabLabel="Reload wallet" />
           {/* <ScrollableTabView
             style={{ marginTop: 15, }}
             initialPage={0}

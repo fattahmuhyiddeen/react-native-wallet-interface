@@ -1,6 +1,6 @@
 {
   "name": "react-native-wallet-interface",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "focus on your business, forget the headache of making wallet interface, api calls and etc",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "moment": "^2.21.0",
     "prop-types": "^15.6.1",
     "react-native-animatable": "^1.2.3",
+    "react-native-arrow": "*",
     "react-native-selectable-grid": "*",
     "react-native-confirmation-code-input": "git+https://github.com/fattahmuhyiddeen/react-native-confirmation-code-input.git#master",
     "react-native-modal": "^2.5.0"
