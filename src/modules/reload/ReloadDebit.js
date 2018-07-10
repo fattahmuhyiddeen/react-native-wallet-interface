@@ -75,7 +75,7 @@ const ReloadDebit = ({ store }) => {
           style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
           label={"CONTINUE"}
           disabled={!store.select.didSelectReloadAmount()}
-          // onPress={() => alert(JSON.stringify(this.sbRef.selectedData()))}
+          onPress={() => store.navigation.navigate("ReloadNotification")}
         />
       </View>
     </View>

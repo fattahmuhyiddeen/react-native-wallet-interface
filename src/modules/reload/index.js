@@ -18,12 +18,7 @@ class WalletReloadScreen extends Component {
     const { themeColor, currency, balance } = state;
 
     return (
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: themeColor.backgroundColor }
-        ]}
-      >
+      <View style={[styles.container, { backgroundColor: themeColor }]}>
         <NavBar
           store={this.props.store}
           title="RELOAD"
@@ -32,7 +27,9 @@ class WalletReloadScreen extends Component {
           type={"dark"}
         />
         {/* <CurrentBalance balance={"3.00"} /> */}
-        <View style={styles.currentBalanceView}>
+        <View
+          style={[styles.currentBalanceView, { backgroundColor: themeColor }]}
+        >
           <Text style={{ color: "white", fontSize: 16, paddingBottom: 5 }}>
             Current Balance
           </Text>
@@ -77,7 +74,6 @@ const styles = StyleSheet.create({
   },
   currentBalanceView: {
     flex: 0.15,
-    // backgroundColor: "black",
     paddingLeft: 20,
     paddingTop: 35
   },
@@ -85,192 +81,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF"
   },
-  linearGradient: {
-    flex: 1,
-    width: "100%",
-    // width: Resolution.deviceWidth,
-    height,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  imageButton: { width: buttonSize, height: buttonSize },
+
   container: {
     flex: 1,
     backgroundColor: "#EFEFEF"
-  },
-  subView: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    width: "100%",
-    // width: Resolution.deviceWidth,
-    height,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent"
-  },
-  textAnimated: {
-    position: "absolute",
-    color: "black",
-    backgroundColor: "transparent",
-    fontSize: 12,
-    // fontFamily: "Lato-Regular",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  touchableOpacityAnimated: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ff6600",
-    borderRadius: buttonSize / 2,
-    height: buttonSize,
-    width: buttonSize
-  },
-  textTitle: {
-    paddingTop: 10,
-    // fontFamily: "Lato-Bold",
-    color: "white",
-    fontSize: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    textAlign: "center"
-  },
-  closeBtn: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-    width: 50,
-    height: 50,
-    backgroundColor: "transparent"
-  },
-  closeBtnIcon: {
-    fontSize: 60,
-    color: "white",
-    backgroundColor: "transparent",
-    alignSelf: "center",
-    justifyContent: "center"
-  },
-  scanAgainButton: {
-    marginTop: 20,
-    backgroundColor: "white",
-    paddingLeft: 50,
-    paddingRight: 50,
-    alignSelf: "center"
-  },
-  scanAgainText: {
-    // fontFamily: "Lato-Bold",
-    fontSize: 18,
-    color: "#196ab2"
-  },
-  hotspotsListDirectionView: {
-    flex: 0.25,
-    borderLeftWidth: 1,
-    height: 65,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingLeft: 5
-  },
-  hotspotsListDirectionTouchable: {
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  nearbyHotspotContainer: {
-    position: "absolute",
-    // bottom: Resolution.isIphoneX ? 65 : 45,
-    width: "90%",
-    alignSelf: "center"
-  },
-  connectingText: {
-    color: "white",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginTop: 230
-  },
-  nearbyHotspotContainerView: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 5,
-    backgroundColor: "#fff",
-    shadowColor: "#555",
-    borderWidth: StyleSheet.hairlineWidth,
-    // borderColor: Colors.lightGray,
-    shadowOffset: {
-      width: 0,
-      height: 4
-    },
-    shadowOpacity: 0.3,
-    elevation: 3,
-    borderRadius: 10,
-    padding: 10
-  },
-  hotspotsListCardView: {
-    flex: 0.75,
-    height: 70,
-    flexDirection: "column",
-    justifyContent: "space-between"
-  },
-  hotspotsListNameTxt: {
-    fontWeight: "normal",
-    // fontFamily: "Lato-Bold",
-    fontSize: 14,
-    paddingTop: 10,
-    paddingLeft: 5
-  },
-  hotspotsListDistanceTxt: {
-    fontWeight: "normal",
-    // fontFamily: "Lato-Bold",
-    fontSize: 13,
-    paddingBottom: 10,
-    paddingLeft: 5
-  },
-  exitContainer: {
-    position: "absolute",
-    // top: Resolution.isIphoneX ? 50 : 30,
-    right: 30
   }
 });
 
 export default WalletReloadScreen;
-// import React, { Component } from "react";
-// import {
-//   Platform,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   View
-// } from "react-native";
-// import PropTypes from "prop-types";
-
-// import Header from "../common/Header";
-
-// class Reload extends Component {
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Header title="Add Money" type="dark" />
-//         <TouchableOpacity
-//           onPress={() => this.props.store.navigation.navigate("About")}
-//         >
-//           <TextInput />
-//           <Text>Add Cash now</Text>
-//         </TouchableOpacity>
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     backgroundColor: "white",
-//     flex: 1
-//   }
-// });
-
-// Reload.propTypes = {};
-
-// Reload.defaultProps = {};
-// export default Reload;

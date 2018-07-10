@@ -16,7 +16,7 @@ npm i -S react-native-wallet-interface
 |----|----|-----------|-------|--------|
 |currency|string|Currency to be displayed in the wallet. Does not affect any logic|MYR|optional|
 |themeColor|color|Color to be the header of the wallet. Adviced to choose similar theme color with your app to maintain seamless user experience|```#3B4A5C```|optional|
-|balance|number|Amount of balance in the wallet. If you want this library handle everything for you, no need to supply this value. This library will call API to check balance on itself. Therefore this prop is just "initial" amount before the api is called|0|optional||
+|initialBalance|number|Amount of balance in the wallet initially. If you want this library handle everything for you, no need to supply this value. This library will call API to check balance on itself. Therefore this prop is just "placeholder" amount before the api is called|0|optional||
 |onExit|function|Function to trigger when wishing to hide this module. (this prop is not used if this library is run independently on its own, only used if it is import into other app)|()=>null|optional|
 |presetReloadAmount|array of objects|preset amount for user to reload (if you dont want to allow for user to freely reload any amount)|```[{ amount: "3" },{ amount: "5" },{ amount: "10" }]```|optional|
 

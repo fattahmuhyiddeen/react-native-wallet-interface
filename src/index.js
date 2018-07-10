@@ -10,8 +10,13 @@ class App extends Component {
       routes: [Routes[0]],
       themeColor: props.themeColor,
       currency: props.currency,
-      balance: props.balance,
-      selectedReloadAmount: null
+      balance: props.initialBalance,
+      selectedReloadAmount: null,
+      screen: {
+        reloadNotification: {
+          scenario: "fail" //first_success/success/fail
+        }
+      }
     };
   }
   navigation = {
@@ -53,7 +58,7 @@ class App extends Component {
     const screens = [];
     for (let i = 0; i < routes.length; i += 1) {
       let s = (
-        <View key={i} style={styles.screen}>
+        <View backgroundColor="white" key={i} style={styles.screen}>
           {React.createElement(routes[i].screen, {
             store: {
               navigation: this.navigation,
@@ -97,7 +102,7 @@ App.defaultProps = {
   onExit: () => null,
   themeColor: "#3B4A5C",
   currency: "MYR",
-  balance: 0,
+  initialBalance: 0,
   presetReloadAmount: [
     { amount: "3" },
     { amount: "5" },
