@@ -15,6 +15,7 @@ npm i -S react-native-wallet-interface
 |Prop|Type|Description|Default|Required|
 |----|----|-----------|-------|--------|
 |currency|string|Currency to be displayed in the wallet. Does not affect any logic|MYR|optional|
+|onBalanceChanged|function|Callback event account balance changed|(balance) => null|optional|
 |themeColor|color|Color to be the header of the wallet. Adviced to choose similar theme color with your app to maintain seamless user experience|```#3B4A5C```|optional|
 |initialBalance|number|Amount of balance in the wallet initially. If you want this library handle everything for you, no need to supply this value. This library will call API to check balance on itself. Therefore this prop is just "placeholder" amount before the api is called|0|optional||
 |onExit|function|Function to trigger when wishing to hide this module. (this prop is not used if this library is run independently on its own, only used if it is import into other app)|()=>null|optional|
@@ -22,3 +23,11 @@ npm i -S react-native-wallet-interface
 
 
 *due to incapability of modern computer handling floating points properly, all numbers that represent amount suppose and should be in integer. (You should know this issue if you are dealing with payment :P)
+
+
+
+### Methods (Accessible from parent using ref)
+|Function Name|Description|Return|Parameter|
+|-------------|-----------|------|---------|
+|getBalance|Get latest balance|integer (latest balance in smallest unit (cent) in integer)|none|
+

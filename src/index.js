@@ -19,6 +19,8 @@ class App extends Component {
       }
     };
   }
+
+  //navigation actions / emulating react navigation
   navigation = {
     navigate: screen => {
       const { routes } = this.state;
@@ -40,16 +42,30 @@ class App extends Component {
     },
     onExit: this.props.onExit
   };
+  //end navigation
 
+  //getter method to get global state
   select = {
     balance: () => (this.state.balance / 100).toFixed(2),
     didSelectReloadAmount: () => this.state.selectedReloadAmount != null
   };
+  //end getter
+
+  //actionto change states / simulate redux action
   action = {
     set: (s, v) => this.setState({ [s]: v }),
+    setBalance: balance => {
+      this.setState({ balance });
+      this.props.onBalanceChanged(balance);
+    },
     selectReloadAmount: v =>
       this.setState({ selectedReloadAmount: this.props.presetReloadAmount[v] })
   };
+  //end action
+
+  //public function that accessible from parent using ref
+  getBalance = () => this.state.balance;
+  //end public function
 
   render() {
     console.log(this.state);
@@ -95,7 +111,8 @@ App.propTypes = {
   themeColor: PropTypes.string,
   currency: PropTypes.string,
   balance: PropTypes.number,
-  presetReloadAmount: PropTypes.array
+  presetReloadAmount: PropTypes.array,
+  onBalanceChanged: PropTypes.func
 };
 
 App.defaultProps = {
@@ -103,6 +120,7 @@ App.defaultProps = {
   themeColor: "#3B4A5C",
   currency: "MYR",
   initialBalance: 0,
+  onBalanceChanged: balance => null,
   presetReloadAmount: [
     { amount: "3" },
     { amount: "5" },
