@@ -1,6 +1,6 @@
 {
   "name": "react-native-wallet-interface",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "focus on your business, forget the headache of making wallet interface, api calls and etc",
   "main": "index.js",
   "scripts": {
@@ -8,19 +8,16 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "react": "16.4.1",
-    "react-native": "0.56.0",
-    "axios": "^0.16.2",
-    "color": "^1.0.3",
-    "moment": "^2.21.0",
-    "prop-types": "^15.6.1",
-    "react-native-animatable": "^1.2.3",
     "react-native-arrow": "*",
     "react-native-selectable-grid": "*",
     "react-native-confirmation-code-input": "git+https://github.com/fattahmuhyiddeen/react-native-confirmation-code-input.git#master",
     "react-native-modal": "^2.5.0"
   },
   "devDependencies": {
+    "react": "16.4.1",
+    "react-native": "0.56.0",
+    "prop-types": "^15.6.1",
+    "axios": "^0.16.2",
     "babel-jest": "23.2.0",
     "babel-preset-react-native": "^5",
     "jest": "23.3.0",
