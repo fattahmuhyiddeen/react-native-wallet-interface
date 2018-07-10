@@ -7,7 +7,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      routes: [Routes[0]]
+      routes: [Routes[0]],
+      themeColor: props.themeColor,
+      currency: props.currency,
+      balance: props.balance
     };
   }
   navigation = {
@@ -23,10 +26,14 @@ class App extends Component {
     goBack: () => {
       const { routes } = this.state;
       if (routes.length > 0) {
-        routes.pop()
-        this.setState({routes})
+        routes.pop();
+        this.setState({ routes });
       }
     }
+  };
+
+  select = {
+    balance: () => (this.state.balance / 100).toFixed(2)
   };
 
   render() {
@@ -36,7 +43,11 @@ class App extends Component {
       let s = (
         <View key={i} style={styles.screen}>
           {React.createElement(routes[i].screen, {
-            store: { navigation: this.navigation, state: this.state }
+            store: {
+              navigation: this.navigation,
+              state: this.state,
+              select: this.select
+            }
           })}
         </View>
       );
@@ -61,10 +72,16 @@ const styles = StyleSheet.create({
 });
 
 App.propTypes = {
-  onExit: PropTypes.func
+  onExit: PropTypes.func,
+  themeColor: PropTypes.string,
+  currency: PropTypes.string,
+  balance: PropTypes.number
 };
 
 App.defaultProps = {
-  onExit: () => null
+  onExit: () => null,
+  themeColor: "#3B4A5C",
+  currency: "MYR",
+  balance: 0
 };
 export default App;

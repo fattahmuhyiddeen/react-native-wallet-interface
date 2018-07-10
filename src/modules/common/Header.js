@@ -23,13 +23,14 @@ const Header = ({
   leftIcon,
   rightIcon,
   onRightIconPressed,
-  isBorderVisible
+  isBorderVisible,
+  store
 }) => {
   const titleStyle = {
-    color: type !== "dark" ? "black" : "white"
+    color: type !== "dark" ? store.state.themeColor : "white"
   };
   const navBarStyle = {
-    backgroundColor: type !== "dark" ? "white" : "black"
+    backgroundColor: type !== "dark" ? "white" : store.state.themeColor
   };
   return (
     <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
@@ -45,11 +46,11 @@ const Header = ({
                   onLeftIconPressed();
                 }}
               >
-                <Icon
+                {/* <Icon
                   color={type !== "dark" ? Colors.oxfordBlue : Colors.white}
                   size={25}
                   name={leftIcon}
-                />
+                /> */}
               </TouchableOpacity>
             )}
             <Text style={[styles.title, titleStyle]}>{title}</Text>
@@ -62,7 +63,7 @@ const Header = ({
                 onRightIconPressed();
               }}
             >
-              <Icon color={Colors.white} size={25} name={rightIcon} />
+              {/* <Icon color={Colors.white} size={25} name={rightIcon} /> */}
             </TouchableOpacity>
           ) : (
             <View />

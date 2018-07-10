@@ -1,10 +1,11 @@
 {
-  "name": "mobile_app",
+  "name": "react-native-wallet-interface",
   "version": "0.0.1",
-  "private": true,
+  "description": "focus on your business, forget the headache of making wallet interface, api calls and etc",
+  "main": "index.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "mocha --reporter spec"
   },
   "dependencies": {
     "react": "16.4.1",
@@ -14,6 +15,7 @@
     "moment": "^2.21.0",
     "prop-types": "^15.6.1",
     "react-native-animatable": "^1.2.3",
+    "react-native-selectable-grid": "*",
     "react-native-confirmation-code-input": "git+https://github.com/fattahmuhyiddeen/react-native-confirmation-code-input.git#master",
     "react-native-modal": "^2.5.0"
   },
@@ -23,7 +25,22 @@
     "jest": "23.3.0",
     "react-test-renderer": "16.4.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fattahmuhyiddeen/react-native-wallet-interface.git"
+  },
+  "keywords": [
+    "wallet",
+    "react-native",
+    "rn"
+  ],
+  "author": "fattahmuhyiddeen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fattahmuhyiddeen/react-native-wallet-interface/issues"
+  },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "homepage": "https://github.com/fattahmuhyiddeen/react-native-wallet-interface#readme"
 }
