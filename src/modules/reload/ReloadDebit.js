@@ -116,8 +116,8 @@ const selectedStyles = StyleSheet.create({
   },
   myrText: {
     // fontFamily: "Lato-Regular",
-    fontSize: 12
-    // color: Colors.white
+    fontSize: 12,
+    color: 'white'
   },
   amountText: {
     // fontFamily: "Lato-Bold",
