@@ -28,10 +28,10 @@ const Header = ({
   store
 }) => {
   const titleStyle = {
-    // color: type !== "dark" ? store.state.themeColor : "white"
+    color: type !== "dark" ? store.state.themeColor : "white"
   };
   const navBarStyle = {
-    // backgroundColor: type !== "dark" ? "white" : store.state.themeColor
+    backgroundColor: type !== "dark" ? "white" : store.state.themeColor
   };
   return (
     <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>

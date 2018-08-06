@@ -16,53 +16,51 @@ import NavBar from "../common/Header";
 
 export default class EnterTacScreen extends Component {
   state = {
-    phone: "",
-    countryCode: "",
-    isAgree: false
+    tac: ""
   };
   render() {
     const { store } = this.props;
     const { state } = store;
     const { themeColor } = state;
-    const { phone, countryCode, isAgree } = this.state;
-    const isFilled = phone != "" && countryCode != "" && isAgree;
+    const isFilled = this.state.tac != "";
     return (
       <View style={styles.container}>
         <View style={[styles.header, { backgroundColor: themeColor }]}>
           <NavBar
-            title="VERIFICATION\nCODE"
+            title={"VERIFICATION\nCODE"}
             type="dark"
             store={store}
             // onRightIconPressed={() => goToFromTab(2, "Options")}
           />
         </View>
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={{ paddingTop: 10 }}
-        >
-          <View style={{ padding: 20 }}>
+        <View style={styles.scrollView}>
+          <View style={{ padding: 20, paddingTop: 50 }}>
+            <Text style={{ color: "black", fontSize: 16, fontWeight: "bold" }}>
+              Verification Code
+            </Text>
             <Text style={{ color: "grey" }}>
-              Just enter your registered local mobile number, we'll send you the
-              secret code. Easy-peasy.
+              Check your sms and type here the secret code we sent to you.
             </Text>
 
-            <CodeInput
-              ref={ref => {
-                this.codeInput = ref;
-              }}
-              keyboardType="numeric"
-              className={"border-b"}
-              codeLength={6}
-              space={5}
-              size={40}
-              codeInputStyle={{ color: "black" }}
-              activeColor={"#000"}
-              inactiveColor={"#bbb"}
-              inputPosition="left"
-              onFulfill={input => this.enableVerify(input)}
-              onUnfulfill={this.disableVerify}
-            />
+            <View style={{ alignItems: "center" }}>
+              <CodeInput
+                ref={ref => {
+                  this.codeInput = ref;
+                }}
+                keyboardType="numeric"
+                className={"border-b"}
+                codeLength={6}
+                space={5}
+                size={40}
+                codeInputStyle={{ color: "black" }}
+                activeColor={"#000"}
+                inactiveColor={"#bbb"}
+                inputPosition="left"
+                onFulfill={tac => this.setState({ tac })}
+                // onUnfulfill={this.disableVerify}
+              />
+            </View>
 
             <TouchableOpacity
               activeOpacity={isFilled ? 0.5 : 1}
@@ -77,12 +75,6 @@ export default class EnterTacScreen extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-        <View style={styles.subheader}>
-          {/* <AvatarImage
-              style={styles.avatar}
-              source={hasInternet ? user.avatar : null}
-            /> */}
         </View>
       </View>
     );
@@ -99,6 +91,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   button: {
+    marginTop: 80,
     borderRadius: 20,
     padding: 10,
     alignItems: "center"
@@ -113,7 +106,6 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    marginTop: 70,
     flex: 0.8
   },
   header: {
