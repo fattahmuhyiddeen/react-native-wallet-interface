@@ -18,6 +18,8 @@ export default class EnterTacScreen extends Component {
   state = {
     tac: ""
   };
+
+  resendCode = this.props.store.navigation.goBack;
   render() {
     const { store } = this.props;
     const { state } = store;
@@ -36,10 +38,10 @@ export default class EnterTacScreen extends Component {
 
         <View style={styles.scrollView}>
           <View style={{ padding: 20, paddingTop: 50 }}>
-            <Text style={{ color: "black", fontSize: 16, fontWeight: "bold" }}>
+            <Text style={{ color: "black", fontSize: 18, fontWeight: "bold" }}>
               Verification Code
             </Text>
-            <Text style={{ color: "grey" }}>
+            <Text style={{ color: "grey", marginTop: 10 }}>
               Check your sms and type here the secret code we sent to you.
             </Text>
 
@@ -60,6 +62,14 @@ export default class EnterTacScreen extends Component {
                 onFulfill={tac => this.setState({ tac })}
                 // onUnfulfill={this.disableVerify}
               />
+            </View>
+
+            <View
+              style={{ width: "100%", alignItems: "center", marginTop: 70 }}
+            >
+              <TouchableOpacity onPress={this.resendCode}>
+                <Text style={{ color: "grey" }}>Resend Code</Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -91,7 +101,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   button: {
-    marginTop: 80,
+    marginTop: 60,
     borderRadius: 20,
     padding: 10,
     alignItems: "center"
@@ -119,12 +129,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%"
-  },
-  avatar: {
-    height: 70,
-    width: 70,
-    borderRadius: 35,
-    borderWidth: 2,
-    borderColor: "white"
   }
 });

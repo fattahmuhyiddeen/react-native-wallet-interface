@@ -6,8 +6,8 @@ import EnterTacScreen from "../modules/register/EnterTacScreen";
 import React from "react";
 
 export default [
-  { screen: EnterTacScreen, name: "EnterTac" },
   { screen: EnterPhoneScreen, name: "EnterPhone" },
+  { screen: EnterTacScreen, name: "EnterTac" },
   { screen: ReloadScreen, name: "Reload" },
   { screen: AboutScreen, name: "About" },
   { screen: ReloadNotificationScreen, name: "ReloadNotification" }

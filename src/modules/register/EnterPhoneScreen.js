@@ -22,6 +22,10 @@ export default class EnterPhoneScreen extends Component {
     countryCode: "",
     isAgree: false
   };
+
+  buttonPressed = () => {
+    this.props.store.navigation.navigate("EnterTac");
+  };
   render() {
     const { store } = this.props;
     const { state } = store;
@@ -39,10 +43,7 @@ export default class EnterPhoneScreen extends Component {
           />
         </View>
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={{ paddingTop: 10 }}
-        >
+        <View style={styles.scrollView}>
           <View style={{ padding: 20 }}>
             <Text style={{ color: "grey" }}>
               Just enter your registered local mobile number, we'll send you the
@@ -72,6 +73,7 @@ export default class EnterPhoneScreen extends Component {
                 <TextInput
                   value={phone}
                   maxLength={9}
+                  autoFocus
                   style={styles.textInput}
                   keyboardType="phone-pad"
                   onChangeText={phone => this.setState({ phone })}
@@ -114,14 +116,14 @@ export default class EnterPhoneScreen extends Component {
                 styles.button,
                 isFilled ? styles.buttonFill : styles.buttonOutline
               ]}
-              onPress={isFilled ? () => alert("a") : null}
+              onPress={isFilled ? this.buttonPressed : null}
             >
               <Text style={{ color: isFilled ? "white" : "orange" }}>
                 REGISTER
               </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
         <View style={styles.subheader}>
           {/* <AvatarImage
               style={styles.avatar}
