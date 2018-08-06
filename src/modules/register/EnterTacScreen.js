@@ -8,15 +8,13 @@ import {
   TextInput,
   TouchableOpacity
 } from "react-native";
+import CodeInput from "react-native-confirmation-code-input";
 import PropTypes from "prop-types";
 import Button from "../common/Button";
 // import AvatarImage from "common/AvatarImage";
 import NavBar from "../common/Header";
 
-const tickImg = require("./tick.png");
-const untickImg = require("./untick.png");
-
-export default class EnterPhoneScreen extends Component {
+export default class EnterTacScreen extends Component {
   state = {
     phone: "",
     countryCode: "",
@@ -32,7 +30,7 @@ export default class EnterPhoneScreen extends Component {
       <View style={styles.container}>
         <View style={[styles.header, { backgroundColor: themeColor }]}>
           <NavBar
-            title="COMPLETE REGISTRATION"
+            title="VERIFICATION\nCODE"
             type="dark"
             store={store}
             // onRightIconPressed={() => goToFromTab(2, "Options")}
@@ -49,64 +47,22 @@ export default class EnterPhoneScreen extends Component {
               secret code. Easy-peasy.
             </Text>
 
-            <View style={{ flexDirection: "row", width: "100%" }}>
-              <View
-                style={{
-                  flex: 1,
-                  padding: 5,
-                  flexDirection: "row",
-                  width: "100%"
-                }}
-              >
-                <Text style={{ flex: 1 }}>+</Text>
-                <TextInput
-                  value={countryCode}
-                  maxLength={3}
-                  style={[styles.textInput, { flex: 2 }]}
-                  keyboardType="phone-pad"
-                  onChangeText={countryCode => this.setState({ countryCode })}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-              <View style={{ flex: 5, padding: 5 }}>
-                <TextInput
-                  value={phone}
-                  maxLength={9}
-                  style={styles.textInput}
-                  keyboardType="phone-pad"
-                  onChangeText={phone => this.setState({ phone })}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => this.setState({ isAgree: !isAgree })}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                padding: 20
+            <CodeInput
+              ref={ref => {
+                this.codeInput = ref;
               }}
-            >
-              <Image
-                source={isAgree ? tickImg : untickImg}
-                style={{
-                  tintColor: isAgree ? "green" : "grey",
-                  width: 20,
-                  height: 20,
-                  marginRight: 10
-                }}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  textDecorationLine: "underline",
-                  color: isAgree ? "green" : "grey"
-                }}
-              >
-                I agree with the terms and conditions
-              </Text>
-            </TouchableOpacity>
+              keyboardType="numeric"
+              className={"border-b"}
+              codeLength={6}
+              space={5}
+              size={40}
+              codeInputStyle={{ color: "black" }}
+              activeColor={"#000"}
+              inactiveColor={"#bbb"}
+              inputPosition="left"
+              onFulfill={input => this.enableVerify(input)}
+              onUnfulfill={this.disableVerify}
+            />
 
             <TouchableOpacity
               activeOpacity={isFilled ? 0.5 : 1}

@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react-native-arrow": "*",
-    "react-native-confirmation-code-input": "git+https://github.com/fattahmuhyiddeen/react-native-confirmation-code-input.git#master",
+    "react-native-confirmation-code-input": "^1.0.4",
     "react-native-modal": "^2.5.0",
     "react-native-selectable-grid": "*"
   },
