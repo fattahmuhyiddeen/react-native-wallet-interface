@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  TextInput,
+  Modal,
   TouchableOpacity
 } from "react-native";
 import CodeInput from "react-native-confirmation-code-input";
@@ -16,10 +16,12 @@ import NavBar from "../common/Header";
 
 export default class EnterTacScreen extends Component {
   state = {
-    tac: ""
+    tac: "",
+    modal: ""
   };
 
   resendCode = this.props.store.navigation.goBack;
+  closeModal = () => this.setState({ modal: "" });
   render() {
     const { store } = this.props;
     const { state } = store;
@@ -86,6 +88,20 @@ export default class EnterTacScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
+
+        <Modal transparent visible={this.state.modal != ""}>
+          <View style={styles.modalBG}>
+            <View style={styles.modalBody}>
+              <Text>Yikes</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonFill, { width: 250 }]}
+                onPress={this.closeModal}
+              >
+                <Text style={{ color: "white" }}>OKAY</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -95,6 +111,19 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     flex: 1
+  },
+  modalBG: {
+    backgroundColor: "#00000077",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  modalBody: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 30,
+    alignItems: "center",
+    justifyContent: "center"
   },
   textInput: {
     borderBottomColor: "black",
