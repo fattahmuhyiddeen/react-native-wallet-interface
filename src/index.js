@@ -2,24 +2,24 @@ import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
 import Routes from "./route";
-import ajax from "./services/HttpService";
 import globalState from "./state";
-
+import ApiCaller from "./apiCaller";
+let self;
 class App extends Component {
   constructor(props) {
     // setTimeout(() => alert(JSON.stringify(globalState.state)), 3000);
     super(props);
+    self = this;
     this.state = {
       routes: [Routes[0]],
       profile: {},
       // token: props.token,
       token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjFmMTdhOWNjNDhiYjc1NjUyNmRjYzJmMDVkNzQ0YmMyNDU0ZDEwNTgzMmM5Y2VlMTQ4MjQyYWZiM2E1NTM2NzU1NGIwMTUxMWU4MmU4ODRlIn0.eyJhdWQiOiI1IiwianRpIjoiMWYxN2E5Y2M0OGJiNzU2NTI2ZGNjMmYwNWQ3NDRiYzI0NTRkMTA1ODMyYzljZWUxNDgyNDJhZmIzYTU1MzY3NTU0YjAxNTExZTgyZTg4NGUiLCJpYXQiOjE1MzM1MjA4NzksIm5iZiI6MTUzMzUyMDg3OSwiZXhwIjoxNTMzNTc2MDEwLCJzdWIiOiI4NyIsInNjb3BlcyI6WyJwcm9maWxlIl19.Dp1bOGHSRNp2OB6V90m_6O9W_em93g5uiX2oZU1eYopsKt6V61x9Rf7hs-Dv3A_HEAiIJ1ChqiULE7_LZhSwvEWO9ip86NOsaLCupmUJGtxe4rDQ-J7NePadCveHZmUjd7bftUaPSeJCnRlaIunzeCQwUou5o9ahChznWKLsxPK9uUdIcTbJI8P3JkmxmanU3-niUF3o-SZCOeCZIp5A0vAOxYzXK4QSUkVSYlc8bY_GdAo4K448Bgt42LZgtsNmgVF8JpURLqFLsri51HMAySfs9irnOVRZXNF654LzVIfxe7PHswslWO5kE5mvOxIpTaDpdUGUEyNeSYr64VJ1ha-ELiwYRoDX8olzu1L0VcoAdSSX9XFHv0lqDL8PyIoeLHExI8lzQeXLUlYVeoS91SyqIyWS5xBteIshw4XpU5HgB1Dcx97D0ngLe19cpYvfLtUf_-ilBrQXW26S2pzTFr2r_PWhQL006DKvSHEJ-xGN-DRsSiF6yQzfpR3SENU5kXhS0uPK7kwKgtBmgyBPCeih65d70jzMQFNwXTwe_4jFB3io6FusUzM7BA9eHVM3YcaPLAvQL-bYozzbJFG_tkLCPen8KU7oGgXWFDj-WWFjRvo94akftibCrxNGdLgdDPQrKAyvREVg2JSSE7F3_kio0cT3r5zWfqIifgk36cE",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA0N2Q5YmU0MmI4NzVkZmQ3YmU2MDg4NTlkMWVjNjAwY2JkZDg4NDZiNjZlMjAyZWVjNmZhMzgwNDAyZjJlOGMxYTBhYmJlZmJhYjA3ZjVmIn0.eyJhdWQiOiI1IiwianRpIjoiMDQ3ZDliZTQyYjg3NWRmZDdiZTYwODg1OWQxZWM2MDBjYmRkODg0NmI2NmUyMDJlZWM2ZmEzODA0MDJmMmU4YzFhMGFiYmVmYmFiMDdmNWYiLCJpYXQiOjE1MzM2MjY5MDYsIm5iZiI6MTUzMzYyNjkwNiwiZXhwIjoxNTMzNzExMzI4LCJzdWIiOiI4NyIsInNjb3BlcyI6WyJwcm9maWxlIl19.TGQlK3VhPkdJ_16Dcw2XUf6u2DZbUvBoWk4jozkD9R7-bvTCUuBQ17YCJU1e3EhDtjnzWNLVojkrASz9ngwdmz981Km1TZWe2YtrFD0GJKfMOPGWdnkkiLUM6fsLCaHAd7vMHfAR8sRL1SVRx6De6bpu_MHR80tqQWfLl7jEQULoNZrZTs-e5i262f5H7YBhi0acUT9IZf_3QZn0LRPV94o4lYCV0JRlfgEX9O4K90vhB-1GTndM8c0j6rq3X_maZHiqtPUTPHquEeHKPn68B1cA2K5yLQMYdpf7SpU2i1ReHGBXHrdzVF2jx3Q__MQeSlH_Z8kbNzMan19lxRXK2tWg-_Bjtp7hwUaJBxFPm7KrNg-PZIiPTSg7JyYAtkiY3S7BbrK-kVswRzKuO08BVzb6lGASVsnB91YuBpE5M7Uiq_kMWIyg0xS79xJZXj_wLaIbc_TwG7G753ZD-burDdoO3t_nhyt_n8dumZucZHEtQ_RHtwrkf-sqr3R4ZnUtWiUrYoKQjz1ze2k0GjiapdshmSs48BNb3ts9kGlCIfmTLCbeM4jK4SlgzmZFCbUAmIGdLCaKCRKP1vY2PaHwWoPbBl-VKW7zR81kJbrxDB9yG4tMhG3w7QJkw22GrymQnSNqJNcJAr8gxwX5QjzUOR6X787bm-bf1xi0oghowJs",
       refreshToken: "",
       themeColor: props.themeColor,
       currency: props.currency,
       balance: props.initialBalance,
-      selectedReloadAmount: null,
       screen: {
         reloadNotification: {
           scenario: "fail" //first_success/success/fail
@@ -29,22 +29,38 @@ class App extends Component {
 
     globalState.setState(this.state);
     // ajax.get("https://facebook.github.io/react-native/movies.json");
-    // setTimeout(() => ajax.post("checkBalance"), 3000);
+
+    // setTimeout(
+    // () =>
+    //   ajax.post(
+    //     "paymentLink",
+    //     { amount: "10", product_description: "reload" },
+    //     v => self.action.setBalance(v)
+    //   ),
+    // () => ajax.post("checkBalance", {}, v => self.action.setBalance(v)),
+    //   0
+    // );
+  }
+
+  componentDidMount() {
+    this.apiCaller.callApi("post", "checkBalance");
   }
 
   //navigation actions / emulating react navigation
   navigation = {
-    navigate: screen => {
+    navigate: (screen, props = {}) => {
       const { routes } = this.state;
       for (let i = 0; i < Routes.length; i++) {
         if (Routes[i].name === screen) {
-          routes.push(Routes[i]);
+          screen = Routes[i];
+          screen.props = props;
+          routes.push(screen);
           return this.setState({ routes });
         }
       }
     },
     goBack: () => {
-      const { routes } = this.state;
+      const { routes } = self.state;
       if (routes.length > 1) {
         routes.pop();
         this.setState({ routes });
@@ -58,8 +74,7 @@ class App extends Component {
 
   //getter method to get global state
   select = {
-    balance: () => (this.state.balance / 100).toFixed(2),
-    didSelectReloadAmount: () => this.state.selectedReloadAmount != null
+    balance: () => (this.state.balance / 100).toFixed(2)
   };
   //end getter
 
@@ -70,8 +85,13 @@ class App extends Component {
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
     },
-    selectReloadAmount: v =>
-      this.setState({ selectedReloadAmount: this.props.presetReloadAmount[v] })
+    onSessionExpired: () => {
+      // alert("aa");
+      this.setState({ token: "" });
+      this.props.onSessionExpired();
+    },
+    callApi: (method, url, params = {}) =>
+      this.apiCaller.callApi(method, url, params)
   };
   //end action
 
@@ -81,6 +101,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     globalState.setState(this.state);
+    globalState.app = this;
   }
 
   render() {
@@ -88,23 +109,30 @@ class App extends Component {
     const { presetReloadAmount } = this.props;
     const { routes } = this.state;
     const screens = [];
+    const store = {
+      navigation: this.navigation,
+      state: this.state,
+      select: this.select,
+      action: this.action,
+      presetReloadAmount
+    };
     for (let i = 0; i < routes.length; i += 1) {
       let s = (
         <View backgroundColor="white" key={i} style={styles.screen}>
           {React.createElement(routes[i].screen, {
-            store: {
-              navigation: this.navigation,
-              state: this.state,
-              select: this.select,
-              action: this.action,
-              presetReloadAmount
-            }
+            ...routes[i].props,
+            store
           })}
         </View>
       );
       screens.push(s);
     }
-    return <View style={styles.container}>{screens}</View>;
+    return (
+      <View style={styles.container}>
+        {screens}
+        <ApiCaller store={store} ref={r => (this.apiCaller = r)} />
+      </View>
+    );
   }
 }
 
@@ -124,6 +152,7 @@ const styles = StyleSheet.create({
 
 App.propTypes = {
   onExit: PropTypes.func,
+  onSessionExpired: PropTypes.func,
   themeColor: PropTypes.string,
   currency: PropTypes.string,
   balance: PropTypes.number,
@@ -134,6 +163,7 @@ App.propTypes = {
 
 App.defaultProps = {
   onExit: () => null,
+  onSessionExpired: () => null,
   themeColor: "#3B4A5C",
   currency: "MYR",
   token: "",

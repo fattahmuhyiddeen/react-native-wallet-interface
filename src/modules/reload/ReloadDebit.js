@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 // import {ListItem} from 'native-base';
@@ -7,6 +7,7 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 // import Icon from "react-native-vector-icons/Entypo";
 import SelectableGrid from "react-native-selectable-grid";
 import Button from "../common/Button";
+// import ajax from "../../services/HttpService";
 
 // import I18n from 'config/i18n';
 
@@ -35,52 +36,66 @@ import Button from "../common/Button";
 //   item: PropTypes.object.isRequired,
 // };
 
-const ReloadDebit = ({ store }) => {
-  const cellRender = (data, cellStyles) => (
+class ReloadDebit extends Component {
+  state = { selectedIndex: null };
+  cellRender = (data, cellStyles) => (
     <View style={cellStyles.cellContainer}>
-      <Text style={cellStyles.myrText}>{store.state.currency}</Text>
+      <Text style={cellStyles.myrText}>{this.props.store.state.currency}</Text>
       <Text style={cellStyles.amountText}>{data.amount}</Text>
     </View>
   );
 
-  return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
-        <View style={styles.subHeader}>
-          <Text>Select Amount</Text>
+  reload = () => {
+    const amount = this.props.store.presetReloadAmount[this.state.selectedIndex]
+      .amount;
+    this.props.store.action.callApi("post", "paymentLink", {
+      amount,
+      product_description: "I dont know why back end still need this"
+    });
+    // ajax.post("paymentLink");
+  };
+  render() {
+    const { store } = this.props;
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.subHeader}>
+            <Text>Select Amount</Text>
+          </View>
+          <SelectableGrid
+            // ref={ref => {
+            //   this.sbRef = ref;
+            // }}
+            data={store.presetReloadAmount}
+            maxPerRow={3}
+            unselectedRender={data => this.cellRender(data, styles)}
+            selectedRender={data => this.cellRender(data, selectedStyles)}
+            unselectedStyle={{
+              backgroundColor: "white",
+              borderLeftWidth: 1,
+              borderBottomWidth: 1,
+              borderColor: "grey"
+            }}
+            onSelect={selectedIndex => this.setState({ selectedIndex })}
+            selectedStyle={{
+              backgroundColor: store.state.themeColor,
+              borderColor: store.state.themeColor
+            }}
+          />
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <Button
+            style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
+            label={"CONTINUE"}
+            disabled={this.state.selectedIndex == null}
+            onPress={this.reload}
+            // onPress={() => store.navigation.navigate("ReloadNotification")}
+          />
         </View>
-        <SelectableGrid
-          // ref={ref => {
-          //   this.sbRef = ref;
-          // }}
-          data={store.presetReloadAmount}
-          maxPerRow={3}
-          unselectedRender={data => cellRender(data, styles)}
-          selectedRender={data => cellRender(data, selectedStyles)}
-          unselectedStyle={{
-            backgroundColor: "white",
-            borderLeftWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: "grey"
-          }}
-          onSelect={v => store.action.selectReloadAmount(v)}
-          selectedStyle={{
-            backgroundColor: store.state.themeColor,
-            borderColor: store.state.themeColor
-          }}
-        />
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <Button
-          style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
-          label={"CONTINUE"}
-          disabled={!store.select.didSelectReloadAmount()}
-          onPress={() => store.navigation.navigate("ReloadNotification")}
-        />
       </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   cellContainer: {
@@ -117,7 +132,7 @@ const selectedStyles = StyleSheet.create({
   myrText: {
     // fontFamily: "Lato-Regular",
     fontSize: 12,
-    color: 'white'
+    color: "white"
   },
   amountText: {
     // fontFamily: "Lato-Bold",
