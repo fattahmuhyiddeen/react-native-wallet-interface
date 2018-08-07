@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   WebView,
-  View
+  View,
+  ActivityIndicator
 } from "react-native";
 import PropTypes from "prop-types";
 
@@ -22,7 +23,17 @@ class Reload extends Component {
           title={title}
           type="dark"
         />
-        <WebView style={{ flex: 1 }} source={{ uri: this.props.url }} />
+        <WebView
+          javaScriptEnabled
+          renderLoading={() => <ActivityIndicator size="large" />}
+          startInLoadingState
+          mixedContentMode="always"
+          dataDetectorTypes="all"
+          geolocationEnabled
+          allowUniversalAccessFromFileURLs
+          style={{ flex: 1 }}
+          source={{ uri: this.props.url }}
+        />
       </View>
     );
   }
