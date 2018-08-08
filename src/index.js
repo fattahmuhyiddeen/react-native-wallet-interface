@@ -14,12 +14,11 @@ class App extends Component {
     self = this;
     this.state = {
       routes: [Routes[0]],
+      baseApiURL: props.baseApiURL,
       profile: { full_name: "fattah" },
       hasWallet: false,
       amountToReload: 0,
-      // token: props.token,
-      token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZjYzU2NzYwODE4OTYzY2QyYTU2MjI0OGUyNzExNmQxYTQwZTc5NzZkY2QyZDYwMWFmYjYyNjFkNDhmZWRiNGY4ZDVhMGY1NzliZDYxNmYwIn0.eyJhdWQiOiI1IiwianRpIjoiZmNjNTY3NjA4MTg5NjNjZDJhNTYyMjQ4ZTI3MTE2ZDFhNDBlNzk3NmRjZDJkNjAxYWZiNjI2MWQ0OGZlZGI0ZjhkNWEwZjU3OWJkNjE2ZjAiLCJpYXQiOjE1MzM3MTczNzksIm5iZiI6MTUzMzcxNzM3OSwiZXhwIjoxNTMzODAzNjA3LCJzdWIiOiIxMjYiLCJzY29wZXMiOlsicHJvZmlsZSJdfQ.Ej4Fx9jpIP3AudoaR_g--HMUGnAP7XUVMykan5BTSNYULsh7nVvz1vRCNle2UsgUaX6w0wh_n-keJgn1jZHuIZEk5l50UMT310gfMYDEPLsLRw5rze1gg2zigLeDXt9qwPVu-4lgG2Nvmq23gZIM7EcXpEJsT6vP9SvMgo30HHhi41TLVxsk7OTdp8ff6C1-_830g9Vp0PDvmxHPBWXjaazkyqD7lA6YJ7YALxR5FsxuQFmQ-09KeUSk80ba-zxcDUgfauoJu8wSkxXzk596xhV9pEvgpKDU3OGrwLuYKRnAuVuybUrQs0Eqjjn_dHhNQTjO_OR0xw774el5bDeNzjzg9zvEinZ6PZdQwH7W-fpjtWlwtWflFYj6F5HP64JQ-18HWfMjIXANBFex84d-91Q9RdSFG67Lzhq5_iMJHA59znF5ALKELkOxWQOameJwut2b0RtBvgBu5fmH5d_YtDhUVLaNpIy2rSFOlSLQPmvt_ulWFUOJ8egLFG0DP_bP9rQbG83icq0ruhJRM55zcOe-cQkWZXVQnvqPabw9kyp4_6my9odjVs00TGSTnzvZVTCZqt8V-Co9C3iFC68U-VPaBgzBOkuX9kibv606OHCJv0dOoZvmbTzkXy_YedWu4I7tNylvMM_8gFCy8JRCDJdjx9mKjYwJX7DZJFjmiKg",
+      token: props.token,
       refreshToken: "",
       themeColor: props.themeColor,
       currency: props.currency,
@@ -47,7 +46,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.apiCaller.callApi("post", "checkBalance");
+    // this.apiCaller.callApi("get", "getProfile");
   }
 
   //navigation actions / emulating react navigation
@@ -115,6 +114,13 @@ class App extends Component {
     globalState.app = this;
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ token: nextProps.token });
+    if (this.props.token != nextProps.token) {
+      this.apiCaller.callApi("get", "getProfile");
+    }
+  }
+
   render() {
     console.log(this.state);
     const { presetReloadAmount } = this.props;
@@ -169,7 +175,8 @@ App.propTypes = {
   balance: PropTypes.number,
   presetReloadAmount: PropTypes.array,
   onBalanceChanged: PropTypes.func,
-  token: PropTypes.string
+  token: PropTypes.string,
+  baseApiURL: PropTypes.string
 };
 
 App.defaultProps = {
@@ -177,7 +184,9 @@ App.defaultProps = {
   onSessionExpired: () => null,
   themeColor: "#3B4A5C",
   currency: "MYR",
-  token: "",
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljNTBjZGQzMjQzMjE0NjczNzdiMjQyNTg0ZWMxMmMyZTRmN2QxMGNlNGM5NWY0NzY4Y2Y3M2RhZWY1NGJkMWI1ODJmYzU4ZjdlYWE1MDY1In0.eyJhdWQiOiI1IiwianRpIjoiOWM1MGNkZDMyNDMyMTQ2NzM3N2IyNDI1ODRlYzEyYzJlNGY3ZDEwY2U0Yzk1ZjQ3NjhjZjczZGFlZjU0YmQxYjU4MmZjNThmN2VhYTUwNjUiLCJpYXQiOjE1MzM3MDc2ODgsIm5iZiI6MTUzMzcwNzY4OCwiZXhwIjoxNTMzNzUzMDM3LCJzdWIiOiIxMjYiLCJzY29wZXMiOlsicHJvZmlsZSJdfQ.ZlqpRP2SYgtu7SSz5G0sF85NDQ2vN_Etf4e2dtt_Y25t5h93MbfRvx3vf70JIe6Fu07rdA0B0y58Nqt9ETDHy0v2TPTTZ-u4AjtWE9wUNyJ4kiv1UyD71tOn3zdCbzMZy-ltjRt4lCXdJgZ4BwKm3oZnB6ZoEnfocI7_60MMRwM2TNib3h_-3gwKT3fPL2SffuOCgQBSNutkAFeYyJBW-PCrSD0OvZkDoDMte51i2Wf5ETO_qHaRB6cdGhkR9xgWzk8sZcGu6iIkc9uCFX5nX_UzYvQHMiU2WDLPVLLXo5Y_AT37fCZkRw-eNiFSiYqwMxWCqHoCH1RfRS4n4G0W7H82Hd-HxLQ1e5l5lUpGHSdGFfIJ6Su_0aovdnnB62HNqSR-T7e9X0lG2VamVmBx2ChbMlvl7GtSSCeGGc8C9n-7valjeyzjw-DdKV4jw1D5I2hCY421qlFmdkW7Nce5U2T4LmH3HLP0wfrbAjfY60uTT4TYuR2hvc65sySbAZuXL4mYa0K54TkcRML0EAZTMkPr4MiGbgOKAVbOo4N0Mb4Wcmegk8Fb9HsU6kKvhcGuJsfPQvtyoI2sPKlJT1apmmEPWA-S4YJ06NEEGFjHgIQsDsaeMEX-8yf7yZL06XA1JnX38hjNBordmPsf6-Jzs-zVgTB6kaxFGRFWGj05Wxo",
+  baseApiURL: "https://ifoundit.tcennoc.unifi.space",
   initialBalance: 0,
   onBalanceChanged: balance => null,
   presetReloadAmount: [

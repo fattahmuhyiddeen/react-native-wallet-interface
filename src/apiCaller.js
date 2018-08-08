@@ -3,13 +3,13 @@ import { Platform } from "react-native";
 import PropTypes from "prop-types";
 import globalState from "./state";
 
-const baseURL = "https://ifoundit.tcennoc.unifi.space/";
 const endPoints = {
   checkBalance: "cls/wallet/get-balance",
   paymentLink: "cls/wifi/payment/create_link",
   walletRegister: "ums/wallet/register",
   verifyTac: "ums/wallet/verify-tac",
-  resendTac: "ums/wallet/resend-tac"
+  resendTac: "ums/wallet/resend-tac",
+  getProfile: "ums/user/profile"
 };
 
 class ApiCaller extends Component {
@@ -66,6 +66,17 @@ class ApiCaller extends Component {
           alert("Fail to resend tac");
         }
         break;
+      case "getProfile":
+        if (isSuccess) {
+          // alert(JSON.stringify(data));
+          action.set(
+            "hasWallet",
+            typeof data.wallet_id != "undefined" && data.wallet_id != null
+          );
+        } else {
+          alert("Fail to get profile");
+        }
+        break;
     }
   };
 
@@ -73,7 +84,7 @@ class ApiCaller extends Component {
     url = route;
     if (endPoints[url] != null) {
       body = { ...body, channel: Platform.OS.toUpperCase() };
-      url = baseURL + endPoints[url];
+      url = this.props.store.state.baseApiURL + "/" + endPoints[url];
     }
 
     console.log("url :" + url);
@@ -89,7 +100,8 @@ class ApiCaller extends Component {
         return;
       }
       const data = JSON.parse(request.responseText);
-      // alert(JSON.stringify(data));
+      console.log(`response for api ${url}:`);
+      console.log(data);
 
       // alert(request.responseText);
       if (request.status === 401) {
