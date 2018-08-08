@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Modal,
+  TouchableOpacity
+} from "react-native";
 // import {ListItem} from 'native-base';
 // import {GeneralFlatList} from 'common/GeneralFlatList';
 // import { Shadow, Colors } from 'theme';
@@ -37,7 +44,9 @@ import Button from "../common/Button";
 // };
 
 class ReloadDebit extends Component {
-  state = { selectedIndex: null };
+  state = { selectedIndex: null, modal: "" };
+  closeModal = () => this.setState({ modal: "" });
+
   cellRender = (data, cellStyles) => (
     <View style={cellStyles.cellContainer}>
       <Text style={cellStyles.myrText}>{this.props.store.state.currency}</Text>
@@ -46,8 +55,12 @@ class ReloadDebit extends Component {
   );
 
   reload = () => {
-    const amount = this.props.store.presetReloadAmount[this.state.selectedIndex]
-      .amount;
+    const { store } = this.props;
+    const amount = store.presetReloadAmount[this.state.selectedIndex].amount;
+    if (!store.state.hasWallet) {
+      store.action.set("amountToReload", amount);
+      return this.setState({ modal: "notify_create" });
+    }
     this.props.store.action.callApi("post", "paymentLink", {
       amount,
       product_description: "I dont know why back end still need this"
@@ -92,6 +105,44 @@ class ReloadDebit extends Component {
             // onPress={() => store.navigation.navigate("ReloadNotification")}
           />
         </View>
+        <Modal transparent visible={this.state.modal != ""}>
+          <View style={styles.modalBG}>
+            <View style={styles.modalBody}>
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 10,
+                  height: 30,
+                  width: 30
+                }}
+                onPress={this.closeModal}
+              >
+                <Text style={{ color: "black" }}>X</Text>
+              </TouchableOpacity>
+              <Text
+                style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
+              >
+                But Wait!
+              </Text>
+
+              <Text style={{ color: "grey", marginTop: 10, marginBottom: 30 }}>
+                {"You don't have any cash in your account.\nLet's begin now?"}
+              </Text>
+
+              <Button
+                style={{
+                  marginHorizontal: 20,
+                  justifyContent: "flex-end",
+                  width: 250
+                }}
+                label={"CONTINUE"}
+                onPress={() => store.navigation.reset("EnterPhone")}
+                // onPress={() => store.navigation.navigate("ReloadNotification")}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -102,6 +153,19 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "center",
     alignItems: "center"
+  },
+  modalBG: {
+    backgroundColor: "#00000077",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  modalBody: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 30,
+    alignItems: "center",
+    justifyContent: "center"
   },
   subHeader: {
     height: 35,

@@ -6,7 +6,8 @@ import globalState from "./state";
 const baseURL = "https://ifoundit.tcennoc.unifi.space/";
 const endPoints = {
   checkBalance: "cls/wallet/get-balance",
-  paymentLink: "cls/wifi/payment/create_link"
+  paymentLink: "cls/wifi/payment/create_link",
+  walletRegister: "ums/wallet/register"
 };
 
 class ApiCaller extends Component {
@@ -16,13 +17,13 @@ class ApiCaller extends Component {
     const { navigate, goBack } = navigation;
 
     const { setBalance } = action;
-    // alert(url);
+    action.set("hasWallet", isSuccess);
     switch (url) {
       case "checkBalance":
         if (isSuccess) {
           setBalance(data.balance);
         } else {
-          alert("Fail to retrieve balance");
+          // alert("Fail to retrieve balance");
         }
         break;
 

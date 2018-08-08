@@ -5,6 +5,8 @@ import Routes from "./route";
 import globalState from "./state";
 import ApiCaller from "./apiCaller";
 let self;
+console.disableYellowBox = true;
+
 class App extends Component {
   constructor(props) {
     // setTimeout(() => alert(JSON.stringify(globalState.state)), 3000);
@@ -13,9 +15,11 @@ class App extends Component {
     this.state = {
       routes: [Routes[0]],
       profile: {},
+      hasWallet: false,
+      amountToReload: 0,
       // token: props.token,
       token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA0N2Q5YmU0MmI4NzVkZmQ3YmU2MDg4NTlkMWVjNjAwY2JkZDg4NDZiNjZlMjAyZWVjNmZhMzgwNDAyZjJlOGMxYTBhYmJlZmJhYjA3ZjVmIn0.eyJhdWQiOiI1IiwianRpIjoiMDQ3ZDliZTQyYjg3NWRmZDdiZTYwODg1OWQxZWM2MDBjYmRkODg0NmI2NmUyMDJlZWM2ZmEzODA0MDJmMmU4YzFhMGFiYmVmYmFiMDdmNWYiLCJpYXQiOjE1MzM2MjY5MDYsIm5iZiI6MTUzMzYyNjkwNiwiZXhwIjoxNTMzNzExMzI4LCJzdWIiOiI4NyIsInNjb3BlcyI6WyJwcm9maWxlIl19.TGQlK3VhPkdJ_16Dcw2XUf6u2DZbUvBoWk4jozkD9R7-bvTCUuBQ17YCJU1e3EhDtjnzWNLVojkrASz9ngwdmz981Km1TZWe2YtrFD0GJKfMOPGWdnkkiLUM6fsLCaHAd7vMHfAR8sRL1SVRx6De6bpu_MHR80tqQWfLl7jEQULoNZrZTs-e5i262f5H7YBhi0acUT9IZf_3QZn0LRPV94o4lYCV0JRlfgEX9O4K90vhB-1GTndM8c0j6rq3X_maZHiqtPUTPHquEeHKPn68B1cA2K5yLQMYdpf7SpU2i1ReHGBXHrdzVF2jx3Q__MQeSlH_Z8kbNzMan19lxRXK2tWg-_Bjtp7hwUaJBxFPm7KrNg-PZIiPTSg7JyYAtkiY3S7BbrK-kVswRzKuO08BVzb6lGASVsnB91YuBpE5M7Uiq_kMWIyg0xS79xJZXj_wLaIbc_TwG7G753ZD-burDdoO3t_nhyt_n8dumZucZHEtQ_RHtwrkf-sqr3R4ZnUtWiUrYoKQjz1ze2k0GjiapdshmSs48BNb3ts9kGlCIfmTLCbeM4jK4SlgzmZFCbUAmIGdLCaKCRKP1vY2PaHwWoPbBl-VKW7zR81kJbrxDB9yG4tMhG3w7QJkw22GrymQnSNqJNcJAr8gxwX5QjzUOR6X787bm-bf1xi0oghowJs",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljNTBjZGQzMjQzMjE0NjczNzdiMjQyNTg0ZWMxMmMyZTRmN2QxMGNlNGM5NWY0NzY4Y2Y3M2RhZWY1NGJkMWI1ODJmYzU4ZjdlYWE1MDY1In0.eyJhdWQiOiI1IiwianRpIjoiOWM1MGNkZDMyNDMyMTQ2NzM3N2IyNDI1ODRlYzEyYzJlNGY3ZDEwY2U0Yzk1ZjQ3NjhjZjczZGFlZjU0YmQxYjU4MmZjNThmN2VhYTUwNjUiLCJpYXQiOjE1MzM3MDc2ODgsIm5iZiI6MTUzMzcwNzY4OCwiZXhwIjoxNTMzNzUzMDM3LCJzdWIiOiIxMjYiLCJzY29wZXMiOlsicHJvZmlsZSJdfQ.ZlqpRP2SYgtu7SSz5G0sF85NDQ2vN_Etf4e2dtt_Y25t5h93MbfRvx3vf70JIe6Fu07rdA0B0y58Nqt9ETDHy0v2TPTTZ-u4AjtWE9wUNyJ4kiv1UyD71tOn3zdCbzMZy-ltjRt4lCXdJgZ4BwKm3oZnB6ZoEnfocI7_60MMRwM2TNib3h_-3gwKT3fPL2SffuOCgQBSNutkAFeYyJBW-PCrSD0OvZkDoDMte51i2Wf5ETO_qHaRB6cdGhkR9xgWzk8sZcGu6iIkc9uCFX5nX_UzYvQHMiU2WDLPVLLXo5Y_AT37fCZkRw-eNiFSiYqwMxWCqHoCH1RfRS4n4G0W7H82Hd-HxLQ1e5l5lUpGHSdGFfIJ6Su_0aovdnnB62HNqSR-T7e9X0lG2VamVmBx2ChbMlvl7GtSSCeGGc8C9n-7valjeyzjw-DdKV4jw1D5I2hCY421qlFmdkW7Nce5U2T4LmH3HLP0wfrbAjfY60uTT4TYuR2hvc65sySbAZuXL4mYa0K54TkcRML0EAZTMkPr4MiGbgOKAVbOo4N0Mb4Wcmegk8Fb9HsU6kKvhcGuJsfPQvtyoI2sPKlJT1apmmEPWA-S4YJ06NEEGFjHgIQsDsaeMEX-8yf7yZL06XA1JnX38hjNBordmPsf6-Jzs-zVgTB6kaxFGRFWGj05Wxo",
       refreshToken: "",
       themeColor: props.themeColor,
       currency: props.currency,
@@ -66,6 +70,13 @@ class App extends Component {
         this.setState({ routes });
       } else {
         this.props.onExit();
+      }
+    },
+    reset: (screen, props = {}) => {
+      for (let i = 0; i < Routes.length; i++) {
+        if (Routes[i].name === screen) {
+          return this.setState({ routes: [Routes[i]] });
+        }
       }
     },
     onExit: this.props.onExit

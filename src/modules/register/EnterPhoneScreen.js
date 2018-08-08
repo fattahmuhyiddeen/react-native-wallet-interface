@@ -24,7 +24,10 @@ export default class EnterPhoneScreen extends Component {
   };
 
   buttonPressed = () => {
-    this.props.store.navigation.navigate("EnterTac");
+    this.props.store.action.callApi("post", "walletRegister", {
+      contact_number: countryCode + phone
+    });
+    // this.props.store.navigation.navigate("EnterTac");
   };
   render() {
     const { store } = this.props;
@@ -63,6 +66,7 @@ export default class EnterPhoneScreen extends Component {
                 <TextInput
                   value={countryCode}
                   maxLength={3}
+                  placeholder="+60"
                   style={[styles.textInput, { flex: 2 }]}
                   keyboardType="phone-pad"
                   onChangeText={countryCode => this.setState({ countryCode })}
@@ -73,6 +77,7 @@ export default class EnterPhoneScreen extends Component {
                 <TextInput
                   value={phone}
                   maxLength={9}
+                  placeholder="e.g. : 01110001000"
                   autoFocus
                   style={styles.textInput}
                   keyboardType="phone-pad"

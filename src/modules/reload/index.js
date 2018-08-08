@@ -44,21 +44,6 @@ class WalletReloadScreen extends Component {
         </View>
         <View style={styles.reloadMethodView}>
           <ReloadDebit store={store} tabLabel="Reload wallet" />
-          {/* <ScrollableTabView
-            style={{ marginTop: 15, }}
-            initialPage={0}
-            renderTabBar={() => <ReloadTabBar />}
-          >
-            <ReloadDebit
-              tabLabel={I18n.t('walletReload.debitCreditCard')}
-            />
-            <ReloadDebit
-              tabLabel={I18n.t('walletReload.onlineBanking')}
-            />
-            <ReloadSoftPin
-              tabLabel={I18n.t('walletReload.softPin')}
-            />
-          </ScrollableTabView> */}
         </View>
       </View>
     );
