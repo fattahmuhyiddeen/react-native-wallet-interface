@@ -7,22 +7,26 @@ const baseURL = "https://ifoundit.tcennoc.unifi.space/";
 const endPoints = {
   checkBalance: "cls/wallet/get-balance",
   paymentLink: "cls/wifi/payment/create_link",
-  walletRegister: "ums/wallet/register"
+  walletRegister: "ums/wallet/register",
+  verifyTac: "ums/wallet/verify-tac",
+  resendTac: "ums/wallet/resend-tac"
 };
 
 class ApiCaller extends Component {
   response = (url, isSuccess, data) => {
-    data = data.response;
+    // alert(JSON.stringify(data));
+    data = isSuccess ? data.response : data.error_message;
     const { action, navigation } = this.props.store;
     const { navigate, goBack } = navigation;
 
     const { setBalance } = action;
-    action.set("hasWallet", isSuccess);
     switch (url) {
       case "checkBalance":
         if (isSuccess) {
           setBalance(data.balance);
+          action.set("hasWallet", true);
         } else {
+          action.set("hasWallet", false);
           // alert("Fail to retrieve balance");
         }
         break;
@@ -35,6 +39,33 @@ class ApiCaller extends Component {
           alert("Fail to reload");
         }
         break;
+
+      case "walletRegister":
+        if (isSuccess) {
+          alert("succes");
+          navigate("EnterTac");
+        } else {
+          alert("Fail to call tac");
+        }
+        break;
+
+      case "verifyTac":
+        if (isSuccess) {
+          // alert(JSON.stringify(data));
+          // alert("succes");
+        } else {
+          alert("Fail to verify tac");
+        }
+        break;
+
+      case "resendTac":
+        if (isSuccess) {
+          // alert(JSON.stringify(data));
+          alert("New TAC code has been successfully generated");
+        } else {
+          alert("Fail to resend tac");
+        }
+        break;
     }
   };
 
@@ -45,6 +76,11 @@ class ApiCaller extends Component {
       url = baseURL + endPoints[url];
     }
 
+    console.log("url :" + url);
+    console.log("method :" + method);
+    console.log("params :");
+    console.log(body);
+
     const request = new XMLHttpRequest();
     request.setRequestHeader;
     request.onreadystatechange = e => {
@@ -52,24 +88,18 @@ class ApiCaller extends Component {
         this.response(url, false, {});
         return;
       }
+      const data = JSON.parse(request.responseText);
+      // alert(JSON.stringify(data));
 
       // alert(request.responseText);
       if (request.status === 401) {
-        this.response(route, false, {});
+        this.response(route, false, data);
         this.props.store.action.onSessionExpired();
+        return;
       }
 
-      if (request.status === 200) {
-        const data = JSON.parse(request.responseText);
-        this.response(route, true, data);
-        // alert(JSON.stringify(data));
-        // callback(data.balance + 1);
-
-        console.log("success", request.responseText);
-      } else {
-        console.warn("error");
-        this.response(route, false, {});
-      }
+      const isSuccess = request.status == 200 && data.code == 200;
+      this.response(route, isSuccess, data);
     };
 
     request.open(method.toUpperCase(), url);

@@ -7,9 +7,9 @@ import WebViewScreen from "../modules/webview";
 import React from "react";
 
 export default [
-  { screen: EnterPhoneScreen, name: "EnterPhone" },
   { screen: ReloadScreen, name: "Reload" },
   { screen: EnterTacScreen, name: "EnterTac" },
+  { screen: EnterPhoneScreen, name: "EnterPhone" },
   { screen: AboutScreen, name: "About" },
   { screen: ReloadNotificationScreen, name: "ReloadNotification" },
   { screen: WebViewScreen, name: "WebView" }

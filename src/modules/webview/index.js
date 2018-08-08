@@ -13,6 +13,14 @@ import PropTypes from "prop-types";
 import Header from "../common/Header";
 
 class Reload extends Component {
+  onNavigationStateChange = webViewState => {
+    console.log("webview state");
+    console.log(webViewState.url);
+    if (webViewState.url.includes("tm_oses/oses_response")) {
+      this.props.store.navigation.goBack();
+    }
+  };
+  renderLoading = () => <ActivityIndicator size="large" />;
   render() {
     const { store, title } = this.props;
     return (
@@ -25,10 +33,11 @@ class Reload extends Component {
         />
         <WebView
           javaScriptEnabled
-          renderLoading={() => <ActivityIndicator size="large" />}
+          renderLoading={this.renderLoading}
           startInLoadingState
           mixedContentMode="always"
           dataDetectorTypes="all"
+          onNavigationStateChange={this.onNavigationStateChange}
           geolocationEnabled
           allowUniversalAccessFromFileURLs
           style={{ flex: 1 }}

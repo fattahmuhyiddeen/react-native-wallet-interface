@@ -11,7 +11,6 @@ import {
 import CodeInput from "react-native-confirmation-code-input";
 import PropTypes from "prop-types";
 import Button from "../common/Button";
-// import AvatarImage from "common/AvatarImage";
 import NavBar from "../common/Header";
 
 export default class EnterTacScreen extends Component {
@@ -20,7 +19,16 @@ export default class EnterTacScreen extends Component {
     modal: ""
   };
 
-  resendCode = this.props.store.navigation.goBack;
+  verifyTac = () => {
+    this.props.store.action.callApi("post", "verifyTac", {
+      tac_code: this.state.tac
+    });
+  };
+
+  resendTac = () => {
+    this.props.store.action.callApi("get", "resendTac");
+  };
+  // resendCode = this.props.store.navigation.goBack;
   closeModal = () => this.setState({ modal: "" });
   render() {
     const { store } = this.props;
@@ -69,23 +77,24 @@ export default class EnterTacScreen extends Component {
             <View
               style={{ width: "100%", alignItems: "center", marginTop: 70 }}
             >
-              <TouchableOpacity onPress={this.resendCode}>
-                <Text style={{ color: "grey" }}>Resend Code</Text>
+              <TouchableOpacity onPress={this.resendTac}>
+                <Text style={{ color: "grey", marginBottom: 10 }}>
+                  Resend Code
+                </Text>
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              activeOpacity={isFilled ? 0.5 : 1}
-              style={[
-                styles.button,
-                isFilled ? styles.buttonFill : styles.buttonOutline
-              ]}
-              onPress={isFilled ? () => alert("a") : null}
-            >
-              <Text style={{ color: isFilled ? "white" : "orange" }}>
-                REGISTER
-              </Text>
-            </TouchableOpacity>
+            <Button
+              style={{
+                marginHorizontal: 20,
+                justifyContent: "flex-end",
+                width: 250
+              }}
+              disabled={!isFilled}
+              label={"REGISTER"}
+              onPress={this.verifyTac}
+              // onPress={() => store.navigation.navigate("ReloadNotification")}
+            />
           </View>
         </View>
 

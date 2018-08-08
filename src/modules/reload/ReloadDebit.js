@@ -61,7 +61,7 @@ class ReloadDebit extends Component {
       store.action.set("amountToReload", amount);
       return this.setState({ modal: "notify_create" });
     }
-    this.props.store.action.callApi("post", "paymentLink", {
+    store.action.callApi("post", "paymentLink", {
       amount,
       product_description: "I dont know why back end still need this"
     });

@@ -9,8 +9,6 @@ import {
   TouchableOpacity
 } from "react-native";
 import PropTypes from "prop-types";
-import Button from "../common/Button";
-// import AvatarImage from "common/AvatarImage";
 import NavBar from "../common/Header";
 
 const tickImg = require("./tick.png");
@@ -18,16 +16,19 @@ const untickImg = require("./untick.png");
 
 export default class EnterPhoneScreen extends Component {
   state = {
-    phone: "",
-    countryCode: "",
-    isAgree: false
+    phone: __DEV__ ? "12423489" : "",
+    countryCode: __DEV__ ? "60" : "",
+    isAgree: __DEV__
   };
 
   buttonPressed = () => {
-    this.props.store.action.callApi("post", "walletRegister", {
-      contact_number: countryCode + phone
+    const { store } = this.props;
+    const { countryCode, phone } = this.state;
+    store.action.callApi("post", "walletRegister", {
+      contact_number: countryCode + phone,
+      full_name: store.state.profile.full_name
     });
-    // this.props.store.navigation.navigate("EnterTac");
+    // store.navigation.navigate("EnterTac");
   };
   render() {
     const { store } = this.props;
