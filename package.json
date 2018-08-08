@@ -1,6 +1,6 @@
 {
   "name": "react-native-wallet-interface",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "focus on your business, forget the headache of making wallet interface, api calls and etc",
   "main": "index.js",
   "scripts": {
