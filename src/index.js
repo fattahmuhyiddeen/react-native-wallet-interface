@@ -45,8 +45,15 @@ class App extends Component {
     // );
   }
 
+  getProfile = () => {
+    const { token } = this.state;
+    if (typeof token != "undefined" && token != null && token != "") {
+      this.apiCaller.callApi("get", "getProfile");
+    }
+  };
+
   componentDidMount() {
-    // this.apiCaller.callApi("get", "getProfile");
+    this.getProfile();
   }
 
   //navigation actions / emulating react navigation
@@ -114,9 +121,9 @@ class App extends Component {
     globalState.app = this;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ token: nextProps.token });
-    if (this.props.token != nextProps.token) {
+  componentDidUpdate(prevProps) {
+    if (this.props.token != prevProps.token) {
+      this.setState({ token: this.props.token });
       this.apiCaller.callApi("get", "getProfile");
     }
   }
@@ -184,8 +191,9 @@ App.defaultProps = {
   onSessionExpired: () => null,
   themeColor: "#3B4A5C",
   currency: "MYR",
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljNTBjZGQzMjQzMjE0NjczNzdiMjQyNTg0ZWMxMmMyZTRmN2QxMGNlNGM5NWY0NzY4Y2Y3M2RhZWY1NGJkMWI1ODJmYzU4ZjdlYWE1MDY1In0.eyJhdWQiOiI1IiwianRpIjoiOWM1MGNkZDMyNDMyMTQ2NzM3N2IyNDI1ODRlYzEyYzJlNGY3ZDEwY2U0Yzk1ZjQ3NjhjZjczZGFlZjU0YmQxYjU4MmZjNThmN2VhYTUwNjUiLCJpYXQiOjE1MzM3MDc2ODgsIm5iZiI6MTUzMzcwNzY4OCwiZXhwIjoxNTMzNzUzMDM3LCJzdWIiOiIxMjYiLCJzY29wZXMiOlsicHJvZmlsZSJdfQ.ZlqpRP2SYgtu7SSz5G0sF85NDQ2vN_Etf4e2dtt_Y25t5h93MbfRvx3vf70JIe6Fu07rdA0B0y58Nqt9ETDHy0v2TPTTZ-u4AjtWE9wUNyJ4kiv1UyD71tOn3zdCbzMZy-ltjRt4lCXdJgZ4BwKm3oZnB6ZoEnfocI7_60MMRwM2TNib3h_-3gwKT3fPL2SffuOCgQBSNutkAFeYyJBW-PCrSD0OvZkDoDMte51i2Wf5ETO_qHaRB6cdGhkR9xgWzk8sZcGu6iIkc9uCFX5nX_UzYvQHMiU2WDLPVLLXo5Y_AT37fCZkRw-eNiFSiYqwMxWCqHoCH1RfRS4n4G0W7H82Hd-HxLQ1e5l5lUpGHSdGFfIJ6Su_0aovdnnB62HNqSR-T7e9X0lG2VamVmBx2ChbMlvl7GtSSCeGGc8C9n-7valjeyzjw-DdKV4jw1D5I2hCY421qlFmdkW7Nce5U2T4LmH3HLP0wfrbAjfY60uTT4TYuR2hvc65sySbAZuXL4mYa0K54TkcRML0EAZTMkPr4MiGbgOKAVbOo4N0Mb4Wcmegk8Fb9HsU6kKvhcGuJsfPQvtyoI2sPKlJT1apmmEPWA-S4YJ06NEEGFjHgIQsDsaeMEX-8yf7yZL06XA1JnX38hjNBordmPsf6-Jzs-zVgTB6kaxFGRFWGj05Wxo",
+  token: !__DEV__
+    ? ""
+    : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijk5YzNlYmI1NWIzMzVkYzgwYjAyNWM5MmJhNWQxOTU3OWQ2MzI0ZWE4MDg1NGFkZWVjYjE4NjYxMWJkZGI3ODg5OWU5MDYzYzBmMDU3MTYyIn0.eyJhdWQiOiI1IiwianRpIjoiOTljM2ViYjU1YjMzNWRjODBiMDI1YzkyYmE1ZDE5NTc5ZDYzMjRlYTgwODU0YWRlZWNiMTg2NjExYmRkYjc4ODk5ZTkwNjNjMGYwNTcxNjIiLCJpYXQiOjE1MzM3OTMwMjQsIm5iZiI6MTUzMzc5MzAyNCwiZXhwIjoxNTMzODc4MDA3LCJzdWIiOiIxMjYiLCJzY29wZXMiOlsicHJvZmlsZSJdfQ.HGzSITDS0JMRsJm3EjKtgTM14ZM4W-HucgClZmDVgVZm1ZV7GbBCYAY1voriWqSv94VehZtXVDUzFmw2wqJstgYtnMYZOyWMSviSzA0IasdDnsfpb1rkxsjWw7RAPljl8s0d7daf_t3aG6cm-1xK0thtipSChJbs0zgkEIbWGS3vXoNuh-cxYOBXUb2DskNR6JETKLBqtgjP8qvBa2JAPSnb_KJ5on1xkWjjx2_JqnBo876pcGBN5495HUU7bvkVA3AxYc9LysPu-TPvmEhLc3DEhOFQQpUrFfTdJZA6ZeM1ZhhG4pYpjG9BdmRdVdh3AoRxcCKaTm_6RU3BJuldqqy80oRhYYLgxWy-lO5QwzQPjDfYQFEleCpgjAXiCRrNDNy6CNmpFnRQZNt2Zw0jWoP612DRVDYTYoOoQFv94y4FhpoH34Xz3CRYjESqZN1-g5MIqVLizl-ARISVha-A0ejIY-u-PGNsFsQQe6Ob68lq9XVGsi0yh5mu77kyz2FdYj2_Ca8IRJDSKOsfJ94tJKl3B_hwWUAM1wrX_kPpn_SLxhz9GZxgnC5tQYfsiEc6W04zea9dKKgp6zzWWVXzkgUv78SB9qDuP2gOilJirV1rHjPb1RB3pbE6MzRO8Db4cF5o7KjhxaIVuis7OU0Q8KxXFHxE5ckwZLi5FKAZREI",
   baseApiURL: "https://ifoundit.tcennoc.unifi.space",
   initialBalance: 0,
   onBalanceChanged: balance => null,

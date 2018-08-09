@@ -69,6 +69,7 @@ class ApiCaller extends Component {
       case "getProfile":
         if (isSuccess) {
           // alert(JSON.stringify(data));
+          action.set("profile", data);
           action.set(
             "hasWallet",
             typeof data.wallet_id != "undefined" && data.wallet_id != null
