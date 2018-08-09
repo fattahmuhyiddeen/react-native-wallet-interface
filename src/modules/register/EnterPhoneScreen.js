@@ -43,6 +43,8 @@ export default class EnterPhoneScreen extends Component {
             title="COMPLETE REGISTRATION"
             type="dark"
             store={store}
+            onLeftIconPressed={store.navigation.goBack}
+
             // onRightIconPressed={() => goToFromTab(2, "Options")}
           />
         </View>

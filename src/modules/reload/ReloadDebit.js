@@ -67,6 +67,10 @@ class ReloadDebit extends Component {
     });
     // ajax.post("paymentLink");
   };
+  continueNoWallet = () => {
+    this.setState({ modal: "" });
+    this.props.store.navigation.navigate("EnterPhone");
+  };
   render() {
     const { store } = this.props;
     return (
@@ -137,7 +141,7 @@ class ReloadDebit extends Component {
                   width: 250
                 }}
                 label={"CONTINUE"}
-                onPress={() => store.navigation.reset("EnterPhone")}
+                onPress={this.continueNoWallet}
                 // onPress={() => store.navigation.navigate("ReloadNotification")}
               />
             </View>
