@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Platform,
   TouchableOpacity,
@@ -6,27 +6,51 @@ import {
   Text,
   WebView,
   View,
-  ActivityIndicator
-} from "react-native";
-import PropTypes from "prop-types";
+  ActivityIndicator,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
-import Header from "../common/Header";
+import Header from '../common/Header';
 
 class Reload extends Component {
-  onNavigationStateChange = webViewState => {
-    console.log("webview state");
-    console.log(webViewState.url);
-    if (webViewState.url.includes("tm_oses/oses_response")) {
-      this.props.store.navigation.goBack();
+  constructor(props) {
+    super(props);
+
+    if (props.payment_ref_no == null) {
+      props.store.navigation.goBack();
+    } else {
+      props.store.action.add_payment_ref_no(props.payment_ref_no);
     }
+  }
+  onNavigationStateChange = webViewState => {
+    console.log('webview state');
+    console.log(webViewState.url);
+    if (webViewState.url.includes('tm_oses/oses_response')) {
+      this.onClose(true);
+    }
+    //it looks like above url still triggered even though error
+    // else if (webViewState.url.includes('oses/errResTxn.jsp')) {
+    //   this.onClose();
+    // }
   };
   renderLoading = () => <ActivityIndicator size="large" />;
+
+  onClose = (isComplete = false) => {
+    const { store } = this.props;
+    if (isComplete) {
+      store.action.checkPaymentStatus();
+    } else {
+      store.action.remove_payment_ref_no(this.props.payment_ref_no);
+    }
+    store.navigation.goBack();
+  };
+
   render() {
     const { store, title } = this.props;
     return (
       <View style={styles.container}>
         <Header
-          onLeftIconPressed={store.navigation.goBack}
+          onLeftIconPressed={this.onClose}
           store={store}
           title={title}
           type="dark"
@@ -50,15 +74,20 @@ class Reload extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    flex: 1
-  }
+    backgroundColor: 'white',
+    flex: 1,
+  },
 });
 
-Reload.propTypes = { url: PropTypes.string, title: PropTypes.string };
+Reload.propTypes = {
+  url: PropTypes.string,
+  title: PropTypes.string,
+  payment_ref_no: PropTypes.string,
+};
 
 Reload.defaultProps = {
-  url: "https://google.com",
-  title: "WebView"
+  url: 'https://google.com',
+  title: 'WebView',
+  payment_ref_no: null,
 };
 export default Reload;

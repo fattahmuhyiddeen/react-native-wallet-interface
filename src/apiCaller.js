@@ -1,97 +1,143 @@
-import React, { Component } from "react";
-import { Platform } from "react-native";
-import PropTypes from "prop-types";
-import globalState from "./state";
+import React, { Component } from 'react';
+import { Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 const endPoints = {
-  checkBalance: "cls/wallet/get-balance",
-  paymentLink: "cls/wifi/payment/create_link",
-  walletRegister: "ums/wallet/register",
-  verifyTac: "ums/wallet/verify-tac",
-  resendTac: "ums/wallet/resend-tac",
-  getProfile: "ums/user/profile"
+  checkBalance: 'cls/wallet/get-balance',
+  checkPaymentStatus: 'cls/wifi/payment/check_status',
+  paymentLink: 'cls/wifi/payment/create_link',
+  walletRegister: 'ums/wallet/register',
+  verifyTac: 'ums/wallet/verify-tac',
+  resendTac: 'ums/wallet/resend-tac',
+  getProfile: 'ums/user/profile',
 };
 
 class ApiCaller extends Component {
   response = (url, isSuccess, data) => {
     // alert(JSON.stringify(data));
     data = isSuccess ? data.response : data.error_message;
-    const { action, navigation } = this.props.store;
-    const { navigate, goBack } = navigation;
+    const { store } = this.props;
+    const { action, navigation, state } = store;
+    const { navigate, goBack, reset } = navigation;
 
     const { setBalance } = action;
     switch (url) {
-      case "checkBalance":
+      case 'checkBalance':
         if (isSuccess) {
           setBalance(data.balance);
-          action.set("hasWallet", true);
+          action.set('hasWallet', true);
         } else {
-          action.set("hasWallet", false);
+          action.set('hasWallet', false);
           // alert("Fail to retrieve balance");
         }
         break;
 
-      case "paymentLink":
+      case 'paymentLink':
         if (isSuccess) {
           // alert(data.url);
-          navigate("WebView", { url: data.url, title: "Reload" });
+          navigate('WebView', {
+            url: data.url,
+            title: 'Reload',
+            payment_ref_no: data.payment_ref_no,
+          });
         } else {
-          alert("Fail to reload");
+          alert('Fail to reload');
         }
         break;
 
-      case "walletRegister":
+      case 'walletRegister':
         if (isSuccess) {
-          alert("succes");
-          navigate("EnterTac");
+          // alert("succes");
+          navigate('EnterTac');
         } else {
-          alert("Fail to call tac");
+          alert('Fail to call tac');
         }
         break;
 
-      case "verifyTac":
+      case 'verifyTac':
         if (isSuccess) {
           // alert(JSON.stringify(data));
           // alert("succes");
+          action.set('hasWallet', true);
+          reset('Reload');
+          if (state.amountToReload != 0) {
+            action.callApi('post', 'paymentLink', {
+              amount: state.amountToReload,
+              product_description: 'I dont know why back end still need this',
+            });
+            action.set('amountToReload', 0);
+          }
         } else {
-          alert("Fail to verify tac");
+          alert('Fail to verify tac');
         }
         break;
 
-      case "resendTac":
+      case 'resendTac':
         if (isSuccess) {
           // alert(JSON.stringify(data));
-          alert("New TAC code has been successfully generated");
+          alert('New TAC code has been successfully generated');
         } else {
-          alert("Fail to resend tac");
+          alert('Fail to resend tac');
         }
         break;
-      case "getProfile":
+      case 'getProfile':
         if (isSuccess) {
           // alert(JSON.stringify(data));
-          action.set("profile", data);
+          action.set('profile', data);
           action.set(
-            "hasWallet",
-            typeof data.wallet_id != "undefined" && data.wallet_id != null
+            'hasWallet',
+            typeof data.wallet_id != 'undefined' && data.wallet_id != null,
           );
         } else {
-          alert("Fail to get profile");
+          alert('Fail to get profile');
+        }
+        break;
+
+      case 'checkPaymentStatus':
+        if (isSuccess) {
+          let scenario = data.payment_status.toLowerCase();
+          if (scenario == 'processing') return;
+          if (scenario == 'completed') {
+            scenario = 'success';
+          }
+          if (scenario == 'success' && store.select.balance() == 0) {
+            scenario = 'first_success';
+          }
+          navigate('ReloadNotification', { scenario });
+        } else {
+          // setTimeout(()=>);
         }
         break;
     }
   };
 
+  checkPaymentStatus = () => {
+    const { store } = this.props;
+    const arrs = store.state.array_payment_ref_no;
+    for (let i = 0; i < arrs.length; i++) {
+      const payment_ref_no = arrs[i];
+      setTimeout(
+        () => this.callApi('post', 'checkPaymentStatus', { payment_ref_no }),
+        3000,
+      );
+      store.action.remove_payment_ref_no(payment_ref_no);
+    }
+  };
+
   callApi = (method, route, body = {}) => {
+    if (method == null) return;
     url = route;
     if (endPoints[url] != null) {
       body = { ...body, channel: Platform.OS.toUpperCase() };
-      url = this.props.store.state.baseApiURL + "/" + endPoints[url];
+      url = this.props.store.state.baseApiURL + '/' + endPoints[url];
     }
 
-    console.log("url :" + url);
-    console.log("method :" + method);
-    console.log("params :");
+    // if (__DEV__) {
+    console.log('url :' + url);
+    console.log('method :' + method);
+    console.log('params :');
     console.log(body);
+    // }
 
     const request = new XMLHttpRequest();
     request.setRequestHeader;
@@ -101,8 +147,10 @@ class ApiCaller extends Component {
         return;
       }
       const data = JSON.parse(request.responseText);
+      // if (__DEV__) {
       console.log(`response for api ${url}:`);
       console.log(data);
+      // }
 
       // alert(request.responseText);
       if (request.status === 401) {
@@ -116,9 +164,12 @@ class ApiCaller extends Component {
     };
 
     request.open(method.toUpperCase(), url);
-    request.setRequestHeader("Authorization", `Bearer ${globalState.token}`);
-    request.setRequestHeader("Content-Type", `application/json`);
-    request.setRequestHeader("Accept", `application/json`);
+    request.setRequestHeader(
+      'Authorization',
+      `Bearer ${this.props.store.state.token}`,
+    );
+    request.setRequestHeader('Content-Type', `application/json`);
+    request.setRequestHeader('Accept', `application/json`);
     request.send(JSON.stringify(body));
   };
   render() {
