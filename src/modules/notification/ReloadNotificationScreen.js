@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 const successImg = require('./success.png');
 const failImg = require('./fail.png');
 
-export default ({ store, scenario }) => {
+export default ({ store, scenario, amount }) => {
   const { navigation } = store;
   let message = '';
   let title = 'Hooray!';
@@ -27,10 +27,10 @@ export default ({ store, scenario }) => {
     message = 'Yay! You have enough cash now.\nHead over to enjoy wifi@unifi';
   } else if (scenario === 'success') {
     message =
-      "You're in good hands! You've got sufficient cash to enjoy wifi@unifi";
+      'You\'re in good hands! You\'ve got sufficient cash to enjoy wifi@unifi';
   } else {
     // } else if (scenario === 'fail') {
-    message = "Your transaction failed. Let's try again, shall we?";
+    message = 'Your transaction failed. Let\'s try again, shall we?';
     image = failImg;
     title = 'Oh No..';
   }
@@ -45,7 +45,7 @@ export default ({ store, scenario }) => {
       <Text style={styles.subtitle}>Your current balance is</Text>
       <Text style={styles.amount}>{`${
         store.state.currency
-      } ${store.select.balance()}`}</Text>
+      } ${store.select.balance() + amount}`}</Text>
       <Text style={styles.message}>{message}</Text>
       <View style={{ padding: 20 }}>
         <Button label="Let's go" onPress={navigation.goBack} />

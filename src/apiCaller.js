@@ -86,7 +86,7 @@ class ApiCaller extends Component {
           action.set('profile', data);
           action.set(
             'hasWallet',
-            typeof data.wallet_id != 'undefined' && data.wallet_id != null,
+            typeof data.wallet_id !== 'undefined' && data.wallet_id != null,
           );
         } else {
           alert('Fail to get profile');
@@ -96,14 +96,17 @@ class ApiCaller extends Component {
       case 'checkPaymentStatus':
         if (isSuccess) {
           let scenario = data.payment_status.toLowerCase();
+          let amount = data.amount;
           if (scenario == 'processing') return;
           if (scenario == 'completed') {
             scenario = 'success';
           }
           if (scenario == 'success' && store.select.balance() == 0) {
             scenario = 'first_success';
+          } else {
+            amount = 0;
           }
-          navigate('ReloadNotification', { scenario });
+          navigate('ReloadNotification', { scenario, amount });
         } else {
           // setTimeout(()=>);
         }
@@ -129,19 +132,19 @@ class ApiCaller extends Component {
     url = route;
     if (endPoints[url] != null) {
       body = { ...body, channel: Platform.OS.toUpperCase() };
-      url = this.props.store.state.baseApiURL + '/' + endPoints[url];
+      url = `${this.props.store.state.baseApiURL}/${endPoints[url]}`;
     }
 
     // if (__DEV__) {
-    console.log('url :' + url);
-    console.log('method :' + method);
+    console.log(`url :${url}`);
+    console.log(`method :${method}`);
     console.log('params :');
     console.log(body);
     // }
 
     const request = new XMLHttpRequest();
     request.setRequestHeader;
-    request.onreadystatechange = e => {
+    request.onreadystatechange = (e) => {
       if (request.readyState !== 4) {
         this.response(url, false, {});
         return;
@@ -168,8 +171,8 @@ class ApiCaller extends Component {
       'Authorization',
       `Bearer ${this.props.store.state.token}`,
     );
-    request.setRequestHeader('Content-Type', `application/json`);
-    request.setRequestHeader('Accept', `application/json`);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Accept', 'application/json');
     request.send(JSON.stringify(body));
   };
   render() {
