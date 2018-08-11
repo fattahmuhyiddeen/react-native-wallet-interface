@@ -23,18 +23,17 @@ class ApiCaller extends Component {
     const { setBalance } = action;
     switch (url) {
       case 'checkBalance':
+        action.set('loadingBalance', false);
         if (isSuccess) {
           setBalance(data.balance);
           action.set('hasWallet', true);
         } else {
           action.set('hasWallet', false);
-          // alert("Fail to retrieve balance");
         }
         break;
 
       case 'paymentLink':
         if (isSuccess) {
-          // alert(data.url);
           navigate('WebView', {
             url: data.url,
             title: 'Reload',
@@ -89,7 +88,7 @@ class ApiCaller extends Component {
             typeof data.wallet_id !== 'undefined' && data.wallet_id != null,
           );
         } else {
-          alert('Fail to get profile');
+          // alert('Fail to get profile');
         }
         break;
 
@@ -106,6 +105,7 @@ class ApiCaller extends Component {
           } else {
             amount = 0;
           }
+          action.apiCheckBalance();
           navigate('ReloadNotification', { scenario, amount });
         } else {
           // setTimeout(()=>);
@@ -144,7 +144,7 @@ class ApiCaller extends Component {
 
     const request = new XMLHttpRequest();
     request.setRequestHeader;
-    request.onreadystatechange = (e) => {
+    request.onreadystatechange = e => {
       if (request.readyState !== 4) {
         this.response(url, false, {});
         return;

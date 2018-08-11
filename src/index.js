@@ -41,6 +41,7 @@ class App extends Component {
     themeColor: this.props.themeColor,
     currency: this.props.currency,
     balance: this.props.initialBalance,
+    loadingBalance: true,
     screen: {
       reloadNotification: {
         scenario: 'fail', //first_success/success/fail
@@ -52,8 +53,13 @@ class App extends Component {
     const { token } = this.state;
     if (typeof token != 'undefined' && token != null && token != '') {
       this.apiCaller.callApi('get', 'getProfile');
-      this.apiCaller.callApi('post', 'checkBalance');
+      this.apiCheckBalance();
     }
+  };
+
+  apiCheckBalance = () => {
+    this.setState({ loadingBalance: true });
+    this.apiCaller.callApi('post', 'checkBalance');
   };
 
   componentDidMount() {
@@ -110,8 +116,9 @@ class App extends Component {
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
     },
+    apiCheckBalance: () => this.apiCheckBalance(),
+
     onSessionExpired: () => {
-      // alert("aa");
       this.setState({ token: '' });
       this.props.onSessionExpired();
     },

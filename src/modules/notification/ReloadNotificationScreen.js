@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import Button from '../common/Button';
 
 const styles = StyleSheet.create({
@@ -19,7 +19,7 @@ const successImg = require('./success.png');
 const failImg = require('./fail.png');
 
 export default ({ store, scenario, amount }) => {
-  const { navigation } = store;
+  const { navigation, state } = store;
   let message = '';
   let title = 'Hooray!';
   let image = successImg;
@@ -27,10 +27,10 @@ export default ({ store, scenario, amount }) => {
     message = 'Yay! You have enough cash now.\nHead over to enjoy wifi@unifi';
   } else if (scenario === 'success') {
     message =
-      'You\'re in good hands! You\'ve got sufficient cash to enjoy wifi@unifi';
+      "You're in good hands! You've got sufficient cash to enjoy wifi@unifi";
   } else {
     // } else if (scenario === 'fail') {
-    message = 'Your transaction failed. Let\'s try again, shall we?';
+    message = "Your transaction failed. Let's try again, shall we?";
     image = failImg;
     title = 'Oh No..';
   }
@@ -43,9 +43,13 @@ export default ({ store, scenario, amount }) => {
         style={{ height: 120, width: 120 }}
       />
       <Text style={styles.subtitle}>Your current balance is</Text>
-      <Text style={styles.amount}>{`${
-        store.state.currency
-      } ${store.select.balance() + amount}`}</Text>
+      {state.loadingBalance ? (
+        <ActivityIndicator />
+      ) : (
+        <Text style={styles.amount}>{`${
+          store.state.currency
+        } ${store.select.balance()}`}</Text>
+      )}
       <Text style={styles.message}>{message}</Text>
       <View style={{ padding: 20 }}>
         <Button label="Let's go" onPress={navigation.goBack} />
