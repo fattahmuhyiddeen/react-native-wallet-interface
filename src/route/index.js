@@ -4,10 +4,11 @@ import ReloadNotificationScreen from '../modules/notification/ReloadNotification
 import EnterPhoneScreen from '../modules/register/EnterPhoneScreen';
 import EnterTacScreen from '../modules/register/EnterTacScreen';
 import WebViewScreen from '../modules/webview';
-import React from 'react';
+import HistoryScreen from '../modules/history';
 
 export default [
   { screen: ReloadScreen, name: 'Reload' },
+  { screen: HistoryScreen, name: 'History' },
   { screen: ReloadNotificationScreen, name: 'ReloadNotification' },
   { screen: EnterTacScreen, name: 'EnterTac' },
   { screen: EnterPhoneScreen, name: 'EnterPhone' },

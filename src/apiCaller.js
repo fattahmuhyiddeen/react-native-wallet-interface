@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { Platform } from 'react-native';
-import PropTypes from 'prop-types';
+import { Component } from 'react';
+import { Platform, Alert } from 'react-native';
 
 const endPoints = {
   checkBalance: 'cls/wallet/get-balance',
@@ -10,6 +9,7 @@ const endPoints = {
   verifyTac: 'ums/wallet/verify-tac',
   resendTac: 'ums/wallet/resend-tac',
   getProfile: 'ums/user/profile',
+  getReloadHistory: `cls/wallet/get-history?channel=${Platform.OS}`,
 };
 
 class ApiCaller extends Component {
@@ -20,8 +20,14 @@ class ApiCaller extends Component {
     const { action, navigation, state } = store;
     const { navigate, goBack, reset } = navigation;
 
-    const { setBalance } = action;
+    const { setBalance, setReloadHistory } = action;
     switch (url) {
+      case 'getReloadHistory':
+        if (isSuccess) {
+          setReloadHistory(data.trans_list);
+        } else {
+        }
+        break;
       case 'checkBalance':
         action.set('loadingBalance', false);
         if (isSuccess) {
@@ -144,7 +150,7 @@ class ApiCaller extends Component {
 
     const request = new XMLHttpRequest();
     request.setRequestHeader;
-    request.onreadystatechange = e => {
+    request.onreadystatechange = (e) => {
       if (request.readyState !== 4) {
         this.response(url, false, {});
         return;
@@ -155,7 +161,7 @@ class ApiCaller extends Component {
       console.log(data);
       // }
 
-      // alert(request.responseText);
+      // Alert.alert(route, request.responseText);
       if (request.status === 401) {
         this.response(route, false, data);
         this.props.store.action.onSessionExpired();

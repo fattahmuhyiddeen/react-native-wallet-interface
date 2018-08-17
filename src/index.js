@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Routes from './route';
 // import globalState from './state';
 import ApiCaller from './apiCaller';
+
 let self;
 console.disableYellowBox = true;
 
@@ -33,6 +34,7 @@ class App extends Component {
     routes: [Routes[0]],
     baseApiURL: this.props.baseApiURL,
     profile: {},
+    reloadHistory: [],
     array_payment_ref_no: [],
     hasWallet: false,
     amountToReload: 0,
@@ -44,14 +46,14 @@ class App extends Component {
     loadingBalance: true,
     screen: {
       reloadNotification: {
-        scenario: 'fail', //first_success/success/fail
+        scenario: 'fail', // first_success/success/fail
       },
     },
   });
 
   getProfileAndBalance = () => {
     const { token } = this.state;
-    if (typeof token != 'undefined' && token != null && token != '') {
+    if (typeof token !== 'undefined' && token != null && token != '') {
       this.apiCaller.callApi('get', 'getProfile');
       this.apiCheckBalance();
     }
@@ -63,10 +65,11 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.checkReload();
     this.getProfileAndBalance();
   }
 
-  //navigation actions / emulating react navigation
+  // navigation actions / emulating react navigation
   navigation = {
     navigate: (screen, props = {}) => {
       const { routes } = this.state;
@@ -101,20 +104,24 @@ class App extends Component {
       this.props.onExit();
     },
   };
-  //end navigation
+  // end navigation
 
-  //getter method to get global state
+  // getter method to get global state
   select = {
     balance: () => ((100 * this.state.balance) / 100).toFixed(2),
   };
-  //end getter
+  // end getter
 
-  //actionto change states / simulate redux action
+  // actionto change states / simulate redux action
   action = {
     set: (s, v) => this.setState({ [s]: v }),
-    setBalance: balance => {
+    setBalance: (balance) => {
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
+    },
+    setReloadHistory: (reloadHistory) => {
+      this.setState({ reloadHistory });
+      this.props.onReloadHistoryChanged(reloadHistory);
     },
     apiCheckBalance: () => this.apiCheckBalance(),
 
@@ -124,12 +131,12 @@ class App extends Component {
     },
     callApi: (method, url, params = {}) =>
       this.apiCaller.callApi(method, url, params),
-    add_payment_ref_no: v => {
+    add_payment_ref_no: (v) => {
       const array_payment_ref_no = this.state.array_payment_ref_no;
       array_payment_ref_no.push(v);
       this.setState({ array_payment_ref_no });
     },
-    remove_payment_ref_no: v => {
+    remove_payment_ref_no: (v) => {
       const array_payment_ref_no = this.state.array_payment_ref_no.filter(
         item => item != v,
       );
@@ -137,11 +144,12 @@ class App extends Component {
     },
     checkPaymentStatus: () => this.apiCaller.checkPaymentStatus(),
   };
-  //end action
+  // end action
 
-  //public function that accessible from parent using ref
+  // public function that accessible from parent using ref
   getBalance = () => this.state.balance;
-  //end public function
+  checkReload = () => this.apiCaller.callApi('post', 'getReloadHistory');
+  // end public function
 
   componentDidUpdate(prevProps, prevState) {
     // globalState.setState(this.state);
@@ -168,7 +176,7 @@ class App extends Component {
       presetReloadAmount,
     };
     for (let i = 0; i < routes.length; i += 1) {
-      let s = (
+      const s = (
         <View backgroundColor="white" key={i} style={styles.screen}>
           {React.createElement(routes[i].screen, {
             ...routes[i].props,
@@ -209,6 +217,7 @@ App.propTypes = {
   balance: PropTypes.number,
   presetReloadAmount: PropTypes.array,
   onBalanceChanged: PropTypes.func,
+  onReloadHistoryChanged: PropTypes.func,
   token: PropTypes.string,
   baseApiURL: PropTypes.string,
 };
@@ -225,7 +234,8 @@ App.defaultProps = {
   baseApiURL: '',
   // baseApiURL: 'https://ifoundit.tcennoc.unifi.space',
   initialBalance: 0,
-  onBalanceChanged: balance => null,
+  onBalanceChanged: () => null,
+  onReloadHistoryChanged: () => null,
   presetReloadAmount: [
     { amount: '3' },
     { amount: '5' },

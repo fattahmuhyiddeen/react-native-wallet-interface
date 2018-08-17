@@ -1,20 +1,20 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
   Text,
   View,
   Keyboard,
-  TouchableOpacity
-} from "react-native";
-import PropTypes from "prop-types";
-import Arrow from "react-native-arrow";
-import Resolution from "../../style/Resolution";
+  TouchableOpacity,
+} from 'react-native';
+import PropTypes from 'prop-types';
+import Arrow from 'react-native-arrow';
+import Resolution from '../../style/Resolution';
 
 const STATUS_BAR_HEIGHT =
-  Platform.OS === "ios" ? (Resolution.isIphoneX ? 44 : 20) : 0;
+  Platform.OS === 'ios' ? (Resolution.isIphoneX ? 44 : 20) : 0;
 const HEADER_HEIGHT =
-  Platform.OS === "ios" ? (Resolution.isIphoneX ? 88 : 64) : 45;
+  Platform.OS === 'ios' ? (Resolution.isIphoneX ? 88 : 64) : 45;
 const NAV_BAR_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT;
 
 const Header = ({
@@ -25,13 +25,13 @@ const Header = ({
   rightIcon,
   onRightIconPressed,
   isBorderVisible,
-  store
+  store,
 }) => {
   const titleStyle = {
-    color: type !== "dark" ? store.state.themeColor : "white"
+    color: type !== 'dark' ? store.state.themeColor : 'white',
   };
   const navBarStyle = {
-    backgroundColor: type !== "dark" ? "white" : store.state.themeColor
+    backgroundColor: type !== 'dark' ? 'white' : store.state.themeColor,
   };
   return (
     <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
@@ -60,7 +60,7 @@ const Header = ({
                 onRightIconPressed();
               }}
             >
-              {/* <Icon color={Colors.white} size={25} name={rightIcon} /> */}
+              <Text style={{ color: 'white' }}>:</Text>
             </TouchableOpacity>
           ) : (
             <View />
@@ -74,52 +74,52 @@ const Header = ({
 
 const styles = StyleSheet.create({
   leftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center"
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
-    height: HEADER_HEIGHT
+    height: HEADER_HEIGHT,
   },
   statusBar: {
-    height: STATUS_BAR_HEIGHT
+    height: STATUS_BAR_HEIGHT,
   },
   navBar: {
     height: NAV_BAR_HEIGHT,
-    backgroundColor: "transparent",
-    alignItems: "center",
+    backgroundColor: 'transparent',
+    alignItems: 'center',
     paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "black"
+    fontWeight: 'bold',
+    color: 'black',
   },
   border: {
     height: 5,
-    backgroundColor: "black"
-  }
+    backgroundColor: 'black',
+  },
 });
 
 Header.propTypes = {
   title: PropTypes.string,
-  type: PropTypes.oneOf(["dark", "light", "transparent"]),
+  type: PropTypes.oneOf(['dark', 'light', 'transparent']),
   onLeftIconPressed: PropTypes.func,
   rightIcon: PropTypes.string,
   leftIcon: PropTypes.string,
   onRightIconPressed: PropTypes.func,
-  isBorderVisible: PropTypes.bool
+  isBorderVisible: PropTypes.bool,
 };
 
 Header.defaultProps = {
   title: null,
-  type: "transparent",
+  type: 'transparent',
   onLeftIconPressed: null,
-  rightIcon: "md-more",
-  leftIcon: "md-arrow-back",
+  rightIcon: 'md-more',
+  leftIcon: 'md-arrow-back',
   onRightIconPressed: null,
-  isBorderVisible: false
+  isBorderVisible: false,
 };
 export default Header;

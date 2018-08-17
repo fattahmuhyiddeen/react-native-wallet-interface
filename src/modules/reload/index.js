@@ -29,6 +29,7 @@ class WalletReloadScreen extends Component {
           store={this.props.store}
           title="RELOAD"
           onLeftIconPressed={navigation.goBack}
+          // onRightIconPressed={() => navigation.navigate('History')}
           iconColor={'white'}
           type={'dark'}
         />
@@ -45,7 +46,7 @@ class WalletReloadScreen extends Component {
             ) : (
               <TouchableOpacity onPress={() => action.apiCheckBalance()}>
                 <Text style={{ color: 'white', fontSize: 35 }}>
-                  {currency + ' ' + select.balance()}
+                  {`${currency} ${select.balance()}`}
                 </Text>
               </TouchableOpacity>
             )}
