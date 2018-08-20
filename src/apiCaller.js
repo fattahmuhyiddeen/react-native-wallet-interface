@@ -179,7 +179,7 @@ class ApiCaller extends Component {
     );
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('Accept', 'application/json');
-    request.send(JSON.stringify(body));
+    request.send(method === 'get' ? null : JSON.stringify(body));
   };
   render() {
     return null;

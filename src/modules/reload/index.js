@@ -9,10 +9,7 @@ import {
 import NavBar from '../common/Header';
 import PropTypes from 'prop-types';
 import Resolution from '../../style/Resolution';
-// import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ReloadDebit from './ReloadDebit';
-// import ReloadSoftPin from "./ReloadSoftPin";
-// import ReloadTabBar from "./ReloadTabBar";
 const height = Resolution.screenHeight;
 
 const buttonSize = Resolution.isTablet ? 200 : Resolution.deviceWidth * 0.4;

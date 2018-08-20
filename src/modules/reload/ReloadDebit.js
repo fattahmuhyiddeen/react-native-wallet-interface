@@ -8,40 +8,9 @@ import {
   Modal,
   TouchableOpacity
 } from "react-native";
-// import {ListItem} from 'native-base';
-// import {GeneralFlatList} from 'common/GeneralFlatList';
-// import { Shadow, Colors } from 'theme';
-// import Icon from "react-native-vector-icons/Entypo";
 import SelectableGrid from "react-native-selectable-grid";
 import Button from "../common/Button";
-// import ajax from "../../services/HttpService";
 
-// import I18n from 'config/i18n';
-
-// import styles from './styles';
-
-// const renderItem = ({item}) => {
-//   return (
-//     <ListItem style={[styles.listItem, Shadow.nonOffset]}>
-//       <View style={styles.containerListItem}>
-//         <View style={styles.containerListItemLeft}>
-//           <Icon name={'wallet'} size={30} />
-//         </View>
-//         <View style={styles.containerListItemMiddle}>
-//           <Text style={styles.txtTitle}>{'1 May 2018'}</Text>
-//           <Text style={styles.txtDate}>{'12:30 pm'}</Text>
-//         </View>
-//         <View style={styles.containerListItemRight}>
-//           <Text style={styles.txtAmount}>{'MYR 3.00'}</Text>
-//         </View>
-//       </View>
-//     </ListItem>
-//   );
-// };
-
-// renderItem.propTypes = {
-//   item: PropTypes.object.isRequired,
-// };
 
 class ReloadDebit extends Component {
   state = { selectedIndex: null, modal: "" };
@@ -109,7 +78,7 @@ class ReloadDebit extends Component {
             // onPress={() => store.navigation.navigate("ReloadNotification")}
           />
         </View>
-        <Modal transparent visible={this.state.modal != ""}>
+        <Modal transparent visible={this.state.modal != ""} onRequestClose={()=>null}>
           <View style={styles.modalBG}>
             <View style={styles.modalBody}>
               <TouchableOpacity
