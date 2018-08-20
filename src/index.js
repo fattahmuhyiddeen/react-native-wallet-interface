@@ -65,7 +65,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.checkReload();
+    this.checkReloadHistory();
     this.getProfileAndBalance();
   }
 
@@ -116,6 +116,7 @@ class App extends Component {
   action = {
     set: (s, v) => this.setState({ [s]: v }),
     setBalance: (balance) => {
+      this.checkReloadHistory()
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
     },
@@ -148,7 +149,7 @@ class App extends Component {
 
   // public function that accessible from parent using ref
   getBalance = () => this.state.balance;
-  checkReload = () => this.apiCaller.callApi('post', 'getReloadHistory');
+  checkReloadHistory = () => this.apiCaller.callApi('post', 'getReloadHistory');
   // end public function
 
   componentDidUpdate(prevProps, prevState) {
