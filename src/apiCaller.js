@@ -137,8 +137,14 @@ class ApiCaller extends Component {
     if (method == null) return;
     url = route;
     if (endPoints[url] != null) {
-      body = { ...body, channel: Platform.OS.toUpperCase() };
+      // const channel = 'APP';
+      const channel = Platform.OS.toUpperCase()
       url = `${this.props.store.state.baseApiURL}/${endPoints[url]}`;
+      if (method === 'get') {
+        url += `?channel=${channel}`;
+      } else {
+        body = { ...body, channel };
+      }
     }
 
     // if (__DEV__) {
