@@ -12,7 +12,7 @@ import Resolution from '../../style/Resolution';
 import ReloadDebit from './ReloadDebit';
 const height = Resolution.screenHeight;
 
-const buttonSize = Resolution.isTablet ? 200 : Resolution.deviceWidth * 0.4;
+// const buttonSize = Resolution.isTablet ? 200 : Resolution.deviceWidth * 0.4;
 
 class WalletReloadScreen extends Component {
   render() {

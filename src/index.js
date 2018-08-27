@@ -115,12 +115,12 @@ class App extends Component {
   // actionto change states / simulate redux action
   action = {
     set: (s, v) => this.setState({ [s]: v }),
-    setBalance: (balance) => {
-      this.checkReloadHistory()
+    setBalance: balance => {
+      this.checkReloadHistory();
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
     },
-    setReloadHistory: (reloadHistory) => {
+    setReloadHistory: reloadHistory => {
       this.setState({ reloadHistory });
       this.props.onReloadHistoryChanged(reloadHistory);
     },
@@ -132,12 +132,12 @@ class App extends Component {
     },
     callApi: (method, url, params = {}) =>
       this.apiCaller.callApi(method, url, params),
-    add_payment_ref_no: (v) => {
+    add_payment_ref_no: v => {
       const array_payment_ref_no = this.state.array_payment_ref_no;
       array_payment_ref_no.push(v);
       this.setState({ array_payment_ref_no });
     },
-    remove_payment_ref_no: (v) => {
+    remove_payment_ref_no: v => {
       const array_payment_ref_no = this.state.array_payment_ref_no.filter(
         item => item != v,
       );
@@ -241,7 +241,7 @@ App.defaultProps = {
     { amount: '3' },
     { amount: '5' },
     { amount: '10' },
-    { amount: '20' },
+    { amount: '30' },
     { amount: '50' },
     { amount: '100' },
   ],

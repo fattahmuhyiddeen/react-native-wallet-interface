@@ -31,7 +31,7 @@ class ApiCaller extends Component {
       case 'checkBalance':
         action.set('loadingBalance', false);
         if (isSuccess) {
-          setBalance(data.balance);
+          setBalance((data.balance / 100).toFixed(2));
           action.set('hasWallet', true);
         } else {
           action.set('hasWallet', false);
@@ -138,7 +138,7 @@ class ApiCaller extends Component {
     url = route;
     if (endPoints[url] != null) {
       // const channel = 'APP';
-      const channel = Platform.OS.toUpperCase()
+      const channel = Platform.OS.toUpperCase();
       url = `${this.props.store.state.baseApiURL}/${endPoints[url]}`;
       if (method === 'get') {
         url += `?channel=${channel}`;
@@ -156,7 +156,7 @@ class ApiCaller extends Component {
 
     const request = new XMLHttpRequest();
     request.setRequestHeader;
-    request.onreadystatechange = (e) => {
+    request.onreadystatechange = e => {
       if (request.readyState !== 4) {
         this.response(url, false, {});
         return;
