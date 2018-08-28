@@ -120,7 +120,15 @@ class App extends Component {
       this.setState({ balance });
       this.props.onBalanceChanged(balance);
     },
-    setReloadHistory: reloadHistory => {
+    setReloadHistory: data => {
+      const reloadHistory = [];
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].payment_type == '1') {
+          const amount_in_cent = parseInt(data[i].amount);
+          data[i].amount = amount_in_cent / 100;
+          reloadHistory.push(data[i]);
+        }
+      }
       this.setState({ reloadHistory });
       this.props.onReloadHistoryChanged(reloadHistory);
     },
@@ -151,11 +159,6 @@ class App extends Component {
   getBalance = () => this.state.balance;
   checkReloadHistory = () => this.apiCaller.callApi('post', 'getReloadHistory');
   // end public function
-
-  componentDidUpdate(prevProps, prevState) {
-    // globalState.setState(this.state);
-    // globalState.app = this;
-  }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.token != prevProps.token) {
