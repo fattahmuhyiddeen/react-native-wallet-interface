@@ -13,7 +13,11 @@ const endPoints = {
 };
 
 class ApiCaller extends Component {
-  response = (url, isSuccess, data) => {
+  response = (
+    url,
+    isSuccess,
+    data = { error_message: 'Generic error message' },
+  ) => {
     // alert(JSON.stringify(data));
     data = isSuccess ? data.response : data.error_message;
     const { store } = this.props;
@@ -161,7 +165,15 @@ class ApiCaller extends Component {
         this.response(url, false, {});
         return;
       }
-      const data = JSON.parse(request.responseText);
+
+      let data = {};
+
+      try {
+        data = JSON.parse(request.responseText);
+      } catch (e) {
+        this.response(route, false);
+        console.log(e); // error in the above string (in this case, yes)!
+      }
       // if (__DEV__) {
       console.log(`response for api ${url}:`);
       console.log(data);
