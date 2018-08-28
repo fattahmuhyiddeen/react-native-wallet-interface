@@ -55,11 +55,11 @@ class App extends Component {
     const { token } = this.state;
     if (typeof token !== 'undefined' && token != null && token != '') {
       this.apiCaller.callApi('get', 'getProfile');
-      this.apiCheckBalance();
+      this.refreshBalance();
     }
   };
 
-  apiCheckBalance = () => {
+  refreshBalance = () => {
     this.setState({ loadingBalance: true });
     this.apiCaller.callApi('post', 'checkBalance');
   };
@@ -124,7 +124,7 @@ class App extends Component {
       this.setState({ reloadHistory });
       this.props.onReloadHistoryChanged(reloadHistory);
     },
-    apiCheckBalance: () => this.apiCheckBalance(),
+    apiCheckBalance: () => this.refreshBalance(),
 
     onSessionExpired: () => {
       this.setState({ token: '' });
