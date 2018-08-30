@@ -5,12 +5,14 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  PixelRatio,
 } from 'react-native';
 import NavBar from '../common/Header';
 import PropTypes from 'prop-types';
 import Resolution from '../../style/Resolution';
 import ReloadDebit from './ReloadDebit';
 const height = Resolution.screenHeight;
+const hdpi = PixelRatio.get() < 2;
 
 // const buttonSize = Resolution.isTablet ? 200 : Resolution.deviceWidth * 0.4;
 
@@ -41,12 +43,12 @@ class WalletReloadScreen extends Component {
             {state.loadingBalance ? (
               <ActivityIndicator />
             ) : (
-              <TouchableOpacity onPress={() => action.apiCheckBalance()}>
-                <Text style={{ color: 'white', fontSize: 35 }}>
-                  {`${currency} ${select.balance()}`}
-                </Text>
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity onPress={() => action.apiCheckBalance()}>
+                  <Text style={{ color: 'white', fontSize: 35 }}>
+                    {`${currency} ${select.balance()}`}
+                  </Text>
+                </TouchableOpacity>
+              )}
             {/* <TouchableOpacity>
               <Text style={styles.plus}>+</Text>
             </TouchableOpacity> */}
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   currentBalanceView: {
-    flex: 0.15,
+    flex: hdpi ? 0.25 : 0.15,
     paddingLeft: 20,
     paddingTop: 35,
   },
