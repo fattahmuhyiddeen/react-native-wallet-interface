@@ -43,12 +43,12 @@ class WalletReloadScreen extends Component {
             {state.loadingBalance ? (
               <ActivityIndicator />
             ) : (
-                <TouchableOpacity onPress={() => action.apiCheckBalance()}>
-                  <Text style={{ color: 'white', fontSize: 35 }}>
-                    {`${currency} ${select.balance()}`}
-                  </Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity onPress={() => action.apiCheckBalance()}>
+                <Text style={{ color: 'white', fontSize: 35 }}>
+                  {`${currency} ${select.balance()}`}
+                </Text>
+              </TouchableOpacity>
+            )}
             {/* <TouchableOpacity>
               <Text style={styles.plus}>+</Text>
             </TouchableOpacity> */}
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     flex: hdpi ? 0.25 : 0.15,
     paddingLeft: 20,
     paddingTop: 35,
+    paddingBottom: 10,
   },
   reloadMethodView: {
     flex: 1,

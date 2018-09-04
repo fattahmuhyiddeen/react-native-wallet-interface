@@ -180,16 +180,15 @@ class App extends Component {
       this.props.onBalanceChanged(balance);
     },
     setReloadHistory: data => {
-      const reloadHistory = data;
-      // const reloadHistory = [];
-      // for (let i = 0; i < data.length; i++) {
-      //   // if (data[i].payment_type == '1') {
-      //   if (parseInt(data[i].new_balance) >= parseInt(data[i].old_balance)) {
-      //     const amount_in_cent = parseInt(data[i].amount);
-      //     data[i].amount = amount_in_cent / 100;
-      //     reloadHistory.push(data[i]);
-      //   }
-      // }
+      const reloadHistory = [];
+      for (let i = 0; i < data.length; i++) {
+        // if (data[i].payment_type == '1') {
+        // if (parseInt(data[i].new_balance) >= parseInt(data[i].old_balance)) {
+        const amount_in_cent = parseInt(data[i].amount);
+        data[i].amount = amount_in_cent / 100;
+        reloadHistory.push(data[i]);
+        // }
+      }
       this.setState({ reloadHistory });
       this.props.onReloadHistoryChanged(reloadHistory);
     },
