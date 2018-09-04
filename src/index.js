@@ -68,8 +68,8 @@ class App extends Component {
 
   initialModalState = () => ({
     isVisible: false,
-    title: 'Hello',
-    body: 'yeah',
+    title: '',
+    body: '',
     logo: 'error',
     onPress: this.resetModal,
     hasCloseButton: false,
@@ -108,7 +108,11 @@ class App extends Component {
     }
   };
 
-  hardReset = () => this.setState(this.getInitialState());
+  hardReset = () => {
+    this.setState(this.getInitialState());
+    this.props.onReloadHistoryChanged([]);
+    this.props.onBalanceChanged(0);
+  };
 
   refreshBalance = () => {
     this.setState({ loadingBalance: true });
@@ -176,14 +180,16 @@ class App extends Component {
       this.props.onBalanceChanged(balance);
     },
     setReloadHistory: data => {
-      const reloadHistory = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].payment_type == '1') {
-          const amount_in_cent = parseInt(data[i].amount);
-          data[i].amount = amount_in_cent / 100;
-          reloadHistory.push(data[i]);
-        }
-      }
+      const reloadHistory = data;
+      // const reloadHistory = [];
+      // for (let i = 0; i < data.length; i++) {
+      //   // if (data[i].payment_type == '1') {
+      //   if (parseInt(data[i].new_balance) >= parseInt(data[i].old_balance)) {
+      //     const amount_in_cent = parseInt(data[i].amount);
+      //     data[i].amount = amount_in_cent / 100;
+      //     reloadHistory.push(data[i]);
+      //   }
+      // }
       this.setState({ reloadHistory });
       this.props.onReloadHistoryChanged(reloadHistory);
     },
@@ -192,6 +198,7 @@ class App extends Component {
     onSessionExpired: () => {
       this.setState({ token: '' });
       this.props.onSessionExpired();
+      this.hardReset();
     },
     callApi: (method, url, params = {}) =>
       this.apiCaller.callApi(method, url, params),
