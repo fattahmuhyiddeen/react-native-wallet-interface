@@ -59,6 +59,8 @@ class App extends Component {
     }
   };
 
+  hardReset = () => this.setState(this.getInitialState());
+
   refreshBalance = () => {
     this.setState({ loadingBalance: true });
     this.apiCaller.callApi('post', 'checkBalance');
@@ -162,7 +164,11 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.token != prevProps.token) {
-      this.setState({ token: this.props.token }, this.getProfileAndBalance);
+      if (this.props.token == '' || this.props.token == null) {
+        this.hardReset();
+      } else {
+        this.setState({ token: this.props.token }, this.getProfileAndBalance);
+      }
     }
   }
 
