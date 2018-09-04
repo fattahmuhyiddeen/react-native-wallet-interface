@@ -50,7 +50,11 @@ class ApiCaller extends Component {
             payment_ref_no: data.payment_ref_no,
           });
         } else {
-          alert('Fail to reload');
+          // alert('Fail to reload');
+          action.openModal({
+            title: 'Sorry, something weird happened',
+            body: 'Please try again later',
+          });
         }
         break;
 
@@ -59,7 +63,11 @@ class ApiCaller extends Component {
           // alert("succes");
           navigate('EnterTac');
         } else {
-          alert('Fail to call tac');
+          // alert('Fail to call tac');
+          action.openModal({
+            title: 'Sorry, something weird happened',
+            body: 'Please try again later',
+          });
         }
         break;
 
@@ -68,6 +76,7 @@ class ApiCaller extends Component {
           // alert(JSON.stringify(data));
           // alert("succes");
           action.set('hasWallet', true);
+          action.set('numberOfTrialEnteringTac', 0);
           reset('Reload');
           if (state.amountToReload != 0) {
             action.callApi('post', 'paymentLink', {
@@ -77,16 +86,47 @@ class ApiCaller extends Component {
             action.set('amountToReload', 0);
           }
         } else {
-          alert('Fail to verify tac');
+          const is_max = state.numberOfTrialEnteringTac >= 2;
+          action.openModal({
+            title: is_max
+              ? "Oh no! You've reached maximum attempts"
+              : 'Yikes, seems like something went wrong!',
+            body: is_max
+              ? 'Just wait for 10 minutes and try again'
+              : "Hold on, could this be a case of fat fingers?\nLet's try that code again one more time?",
+          });
+          if (is_max) {
+            setTimeout(
+              () => action.set('numberOfTrialEnteringTac', 0),
+              60 * 1000 * 10,
+            );
+            break;
+          }
+          action.set(
+            'numberOfTrialEnteringTac',
+            state.numberOfTrialEnteringTac + 1,
+          );
+          // alert('Fail to verify tac');
         }
         break;
 
       case 'resendTac':
+        action.set('numberOfTrialEnteringTac', 0);
+
         if (isSuccess) {
           // alert(JSON.stringify(data));
-          alert('New TAC code has been successfully generated');
+          // alert('New TAC code has been successfully generated');
+          action.openModal({
+            title: 'Code has been resent',
+            body:
+              "3 minutes are too long without you! We know you missed us, so we sent the code to you via sms again to remind you we're here",
+          });
         } else {
-          alert('Fail to resend tac');
+          // alert('Fail to resend tac');
+          action.openModal({
+            title: 'Sorry, something weird happened',
+            body: 'Please try again later',
+          });
         }
         break;
       case 'getProfile':
@@ -156,6 +196,8 @@ class ApiCaller extends Component {
     console.log(`method :${method}`);
     console.log('params :');
     console.log(body);
+    console.log('token :');
+    console.log(this.props.store.state.token);
     // }
 
     const request = new XMLHttpRequest();

@@ -8,10 +8,10 @@ import HistoryScreen from '../modules/history';
 
 export default [
   { screen: ReloadScreen, name: 'Reload' },
+  { screen: EnterPhoneScreen, name: 'EnterPhone' },
   { screen: HistoryScreen, name: 'History' },
   { screen: ReloadNotificationScreen, name: 'ReloadNotification' },
   { screen: EnterTacScreen, name: 'EnterTac' },
-  { screen: EnterPhoneScreen, name: 'EnterPhone' },
   { screen: AboutScreen, name: 'About' },
   { screen: WebViewScreen, name: 'WebView' },
 ];

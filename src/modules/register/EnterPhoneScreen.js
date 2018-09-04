@@ -3,16 +3,17 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Image,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import NavBar from '../common/Header';
+import AvatarImage from './AvatarImage';
 
 const tickImg = require('./tick.png');
 const untickImg = require('./untick.png');
+const hpImg = require('./hp.png');
 
 export default class EnterPhoneScreen extends Component {
   state = {
@@ -33,7 +34,7 @@ export default class EnterPhoneScreen extends Component {
   render() {
     const { store } = this.props;
     const { state } = store;
-    const { themeColor } = state;
+    const { themeColor, profile } = state;
     const { phone, countryCode, isAgree } = this.state;
     const isFilled = phone != '' && countryCode != '' && isAgree;
     return (
@@ -48,28 +49,40 @@ export default class EnterPhoneScreen extends Component {
             // onRightIconPressed={() => goToFromTab(2, "Options")}
           />
         </View>
+        <View
+          style={{
+            position: 'absolute',
+            // left: 0,
+            // right: 0,
+            height: 100,
+            top: 100,
+            alignSelf: 'center',
+          }}
+        >
+          <AvatarImage />
+          <Text style={{ fontSize: 17, fontWeight: 'bold' }}>
+            {profile.full_name}
+          </Text>
+        </View>
 
         <View style={styles.scrollView}>
           <View style={{ padding: 20 }}>
-            <Text style={{ color: 'grey' }}>
+            <Text style={{ color: 'grey', marginVertical: 10 }}>
               Just enter your registered local mobile number, we'll send you the
               secret code. Easy-peasy.
             </Text>
 
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View
-                style={{
-                  flex: 1,
-                  padding: 5,
-                  flexDirection: 'row',
-                  width: '100%',
-                }}
-              >
-                <Text style={{ flex: 1 }}>+</Text>
+              <View style={styles.countryCodeGroup}>
+                <Image
+                  source={hpImg}
+                  resizeMode="contain"
+                  style={{ height: 20, width: 20, marginRight: 7 }}
+                />
                 <TextInput
-                  value={countryCode}
+                  value={'+ ' + countryCode}
                   maxLength={3}
-                  placeholder="60"
+                  placeholder="+ 60"
                   editable={false}
                   style={[styles.textInput, { flex: 2 }]}
                   keyboardType="phone-pad"
@@ -77,7 +90,7 @@ export default class EnterPhoneScreen extends Component {
                   underlineColorAndroid="transparent"
                 />
               </View>
-              <View style={{ flex: 5, padding: 5 }}>
+              <View style={{ flex: 4, padding: 5 }}>
                 <TextInput
                   value={phone}
                   maxLength={9}
@@ -149,6 +162,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
+  countryCodeGroup: {
+    flex: 1,
+    padding: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
   textInput: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
@@ -168,7 +189,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    marginTop: 70,
+    marginTop: 80,
     flex: 0.8,
   },
   header: {

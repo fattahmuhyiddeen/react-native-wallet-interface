@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Modal,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Routes from './route';
 // import globalState from './state';
+import Button from './modules/common/Button';
 import ApiCaller from './apiCaller';
+import ModalIcon from './modalIcon';
 
 let self;
 console.disableYellowBox = true;
+
+const isIos = Platform.OS == 'ios';
 
 class App extends Component {
   constructor(props) {
@@ -14,6 +26,16 @@ class App extends Component {
     super(props);
     self = this;
     this.state = this.getInitialState();
+
+    Keyboard.addListener(
+      'keyboard' + (isIos ? 'Will' : 'Did') + 'Show',
+      this.onKeyboardAppear,
+    );
+    Keyboard.addListener(
+      'keyboard' + (isIos ? 'Will' : 'Did') + 'Hide',
+      this.onKeyboardHide,
+    );
+    // setTimeout(this.action.openModal, 2000);
 
     // globalState.setState(this.state);
     // ajax.get("https://facebook.github.io/react-native/movies.json");
@@ -30,7 +52,34 @@ class App extends Component {
     // );
   }
 
+  onKeyboardAppear = e =>
+    this.setState({
+      isKeyboardAppear: true,
+      keyboardHeight: e.endCoordinates.height,
+      // screenHeight: Resolution.deviceHeight - e.endCoordinates.height,
+    });
+
+  onKeyboardHide = () =>
+    this.setState({
+      isKeyboardAppear: false,
+      // screenHeight: Resolution.deviceHeight,
+      keyboardHeight: 0,
+    });
+
+  initialModalState = () => ({
+    isVisible: false,
+    title: 'Hello',
+    body: 'yeah',
+    logo: 'error',
+    onPress: this.resetModal,
+    hasCloseButton: false,
+  });
+
   getInitialState = () => ({
+    modal: this.initialModalState(),
+    isKeyboardAppear: false,
+    numberOfTrialEnteringTac: 0,
+    keyboardHeight: 0,
     routes: [Routes[0]],
     baseApiURL: this.props.baseApiURL,
     profile: {},
@@ -116,6 +165,10 @@ class App extends Component {
 
   // actionto change states / simulate redux action
   action = {
+    openModal: (data = {}) =>
+      this.setState({
+        modal: { ...this.initialModalState(), ...data, isVisible: true },
+      }),
     set: (s, v) => this.setState({ [s]: v }),
     setBalance: balance => {
       this.checkReloadHistory();
@@ -172,11 +225,13 @@ class App extends Component {
     }
   }
 
+  resetModal = () => this.setState({ modal: this.initialModalState() });
+
   render() {
     // if (__DEV__)
     console.log(this.state);
     const { presetReloadAmount } = this.props;
-    const { routes } = this.state;
+    const { routes, modal } = this.state;
     const screens = [];
     const store = {
       navigation: this.navigation,
@@ -200,6 +255,43 @@ class App extends Component {
       <View style={styles.container}>
         {screens}
         <ApiCaller store={store} ref={r => (this.apiCaller = r)} />
+        <Modal
+          visible={modal.isVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={this.resetModal}
+          // onDismiss={}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalBody}>
+              {modal.hasCloseButton && (
+                <TouchableOpacity
+                  style={styles.modalCloseButton}
+                  onPress={this.resetModal}
+                >
+                  <Text>X</Text>
+                </TouchableOpacity>
+              )}
+              {modal.logo != '' && <ModalIcon stype={modal.logo} />}
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                  color: 'black',
+                  marginVertical: 10,
+                  textAlign: 'center',
+                }}
+              >
+                {modal.title}
+              </Text>
+              <Text style={{ marginBottom: 20, color: 'grey' }}>
+                {modal.body}
+              </Text>
+              <Button label="OKAY" onPress={modal.onPress} />
+            </View>
+            {/*  */}
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -216,6 +308,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    height: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#00000088',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalBody: {
+    borderRadius: 10,
+    backgroundColor: 'white',
+    width: 300,
+    padding: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

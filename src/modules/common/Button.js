@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   TouchableOpacity,
   Text,
   View,
   ActivityIndicator,
-  StyleSheet
-} from "react-native";
-import PropTypes from "prop-types";
+  StyleSheet,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
 const Button = ({
   label,
@@ -17,25 +17,25 @@ const Button = ({
   isLoading,
   labelStyle,
   element,
-  iconRight
+  iconRight,
 }) => {
   let buttonStyle = styles.primary;
   let extraStyle = {};
-  if (type === "default") {
+  if (type === 'default') {
     buttonStyle = styles.default;
   }
 
-  if (type === "outline") {
+  if (type === 'outline') {
     buttonStyle = styles.outline;
   }
 
-  if (type !== "outline" && type !== "default") {
+  if (type !== 'outline' && type !== 'default') {
     if (disabled || isLoading) {
-      extraStyle = { color: "orange" };
+      extraStyle = { color: '#ff6600' };
       buttonStyle = styles.outline;
     } else {
       buttonStyle = styles.primary;
-      extraStyle = { color: "white" };
+      extraStyle = { color: 'white' };
     }
   }
 
@@ -47,10 +47,10 @@ const Button = ({
     >
       {isLoading && (
         <View style={styles.labelContainer}>
-          <ActivityIndicator size="small" color={"orange"} />
+          <ActivityIndicator size="small" color={'#ff6600'} />
         </View>
       )}
-      {label !== "" &&
+      {label !== '' &&
         !isLoading && (
           <View style={styles.labelContainer}>
             <View style={styles.row}>
@@ -73,65 +73,65 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    alignSelf: "center",
-    flexDirection: "row",
+    alignSelf: 'center',
+    flexDirection: 'row',
     height: 35,
     // paddingVertical: normalize(8),
-    borderRadius: 50
+    borderRadius: 50,
   },
   labelContainer: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   default: {
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   primary: {
-    backgroundColor: "#ff6600"
+    backgroundColor: '#ff6600',
   },
   outline: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: "#ff6600"
+    borderColor: '#ff6600',
   },
   text: {
-    color: "white",
+    color: 'white',
     // fontSize: normalize(14),
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   row: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   icon: {
     // marginVertical: normalize(1),
     // marginHorizontal: normalize(5)
-  }
+  },
 });
 
 Button.propTypes = {
   label: PropTypes.string,
-  type: PropTypes.oneOf(["default", "primary", "outline", "card"]),
+  type: PropTypes.oneOf(['default', 'primary', 'outline', 'card']),
   onPress: PropTypes.func,
   labelStyle: PropTypes.any,
   style: PropTypes.any,
   disabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   element: PropTypes.any,
-  iconRight: PropTypes.string
+  iconRight: PropTypes.string,
 };
 
 Button.defaultProps = {
-  label: "",
-  type: "primary",
+  label: '',
+  type: 'primary',
   onPress: () => null,
   labelStyle: {},
   style: {},
   disabled: false,
   isLoading: false,
   element: null,
-  iconRight: null
+  iconRight: null,
 };
 
 export default Button;
