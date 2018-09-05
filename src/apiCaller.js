@@ -81,7 +81,7 @@ class ApiCaller extends Component {
           if (state.amountToReload != 0) {
             action.callApi('post', 'paymentLink', {
               amount: state.amountToReload,
-              product_description: 'I dont know why back end still need this',
+              product_description: '',
             });
             action.set('amountToReload', 0);
           }

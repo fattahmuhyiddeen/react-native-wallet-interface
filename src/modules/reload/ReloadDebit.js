@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -6,14 +6,14 @@ import {
   View,
   ScrollView,
   Modal,
-  TouchableOpacity,
-} from 'react-native';
-import SelectableGrid from 'react-native-selectable-grid';
-import Button from '../common/Button';
+  TouchableOpacity
+} from "react-native";
+import SelectableGrid from "react-native-selectable-grid";
+import Button from "../common/Button";
 
 class ReloadDebit extends Component {
-  state = { selectedIndex: null, modal: '' };
-  closeModal = () => this.setState({ modal: '' });
+  state = { selectedIndex: null, modal: "" };
+  closeModal = () => this.setState({ modal: "" });
 
   cellRender = (data, cellStyles) => (
     <View style={cellStyles.cellContainer}>
@@ -27,18 +27,18 @@ class ReloadDebit extends Component {
     const amount =
       store.presetReloadAmount[this.state.selectedIndex].amount * 100;
     if (!store.state.hasWallet) {
-      store.action.set('amountToReload', amount);
-      return this.setState({ modal: 'notify_create' });
+      store.action.set("amountToReload", amount);
+      return this.setState({ modal: "notify_create" });
     }
-    store.action.callApi('post', 'paymentLink', {
+    store.action.callApi("post", "paymentLink", {
       amount,
-      product_description: 'I dont know why back end still need this',
+      product_description: ""
     });
     // ajax.post("paymentLink");
   };
   continueNoWallet = () => {
-    this.setState({ modal: '' });
-    this.props.store.navigation.navigate('EnterPhone');
+    this.setState({ modal: "" });
+    this.props.store.navigation.navigate("EnterPhone");
   };
   render() {
     const { store } = this.props;
@@ -57,22 +57,22 @@ class ReloadDebit extends Component {
             unselectedRender={data => this.cellRender(data, styles)}
             selectedRender={data => this.cellRender(data, selectedStyles)}
             unselectedStyle={{
-              backgroundColor: 'white',
+              backgroundColor: "white",
               borderLeftWidth: 1,
               borderBottomWidth: 1,
-              borderColor: 'grey',
+              borderColor: "grey"
             }}
             onSelect={selectedIndex => this.setState({ selectedIndex })}
             selectedStyle={{
               backgroundColor: store.state.themeColor,
-              borderColor: store.state.themeColor,
+              borderColor: store.state.themeColor
             }}
           />
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
-            style={{ marginHorizontal: 20, justifyContent: 'flex-end' }}
-            label={'CONTINUE'}
+            style={{ marginHorizontal: 20, justifyContent: "flex-end" }}
+            label={"CONTINUE"}
             disabled={this.state.selectedIndex == null}
             onPress={this.reload}
             // onPress={() => store.navigation.navigate("ReloadNotification")}
@@ -80,40 +80,40 @@ class ReloadDebit extends Component {
         </View>
         <Modal
           transparent
-          visible={this.state.modal != ''}
+          visible={this.state.modal != ""}
           onRequestClose={() => null}
         >
           <View style={styles.modalBG}>
             <View style={styles.modalBody}>
               <TouchableOpacity
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   right: 0,
                   top: 10,
                   height: 30,
-                  width: 30,
+                  width: 30
                 }}
                 onPress={this.closeModal}
               >
-                <Text style={{ color: 'black' }}>X</Text>
+                <Text style={{ color: "black" }}>X</Text>
               </TouchableOpacity>
               <Text
-                style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}
+                style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
               >
                 But Wait!
               </Text>
 
-              <Text style={{ color: 'grey', marginTop: 10, marginBottom: 30 }}>
+              <Text style={{ color: "grey", marginTop: 10, marginBottom: 30 }}>
                 {"You don't have any cash in your account.\nLet's begin now?"}
               </Text>
 
               <Button
                 style={{
                   marginHorizontal: 20,
-                  justifyContent: 'flex-end',
-                  width: 250,
+                  justifyContent: "flex-end",
+                  width: 250
                 }}
-                label={'CONTINUE'}
+                label={"CONTINUE"}
                 onPress={this.continueNoWallet}
                 // onPress={() => store.navigation.navigate("ReloadNotification")}
               />
@@ -127,64 +127,64 @@ class ReloadDebit extends Component {
 
 const styles = StyleSheet.create({
   cellContainer: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center"
   },
   modalBG: {
-    backgroundColor: '#00000077',
+    backgroundColor: "#00000077",
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center"
   },
   modalBody: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center"
   },
   subHeader: {
     height: 35,
-    justifyContent: 'center',
-    backgroundColor: '#ADADAD',
-    paddingLeft: 10,
+    justifyContent: "center",
+    backgroundColor: "#ADADAD",
+    paddingLeft: 10
   },
   myrText: {
     // fontFamily: "Lato-Regular",
-    fontSize: 12,
+    fontSize: 12
   },
   amountText: {
     // fontFamily: "Lato-Bold",
-    fontSize: 20,
+    fontSize: 20
   },
   buttonContainer: {
     paddingVertical: 10,
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 const selectedStyles = StyleSheet.create({
   cellContainer: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center"
   },
   myrText: {
     // fontFamily: "Lato-Regular",
     fontSize: 12,
-    color: 'white',
+    color: "white"
   },
   amountText: {
     // fontFamily: "Lato-Bold",
     fontSize: 20,
-    color: 'white',
+    color: "white"
   },
   buttonContainer: {
     bottom: 0,
     padding: 10,
-    paddingHorizontal: 30,
-  },
+    paddingHorizontal: 30
+  }
 });
 
 export default ReloadDebit;
