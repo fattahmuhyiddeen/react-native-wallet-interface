@@ -290,7 +290,9 @@ class App extends Component {
               >
                 {modal.title}
               </Text>
-              <Text style={{ marginBottom: 20, color: 'grey' }}>
+              <Text
+                style={{ textAlign: 'center', marginBottom: 20, color: 'grey' }}
+              >
                 {modal.body}
               </Text>
               <Button label="OKAY" onPress={modal.onPress} />

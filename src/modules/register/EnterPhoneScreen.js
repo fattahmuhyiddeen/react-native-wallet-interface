@@ -49,23 +49,30 @@ export default class EnterPhoneScreen extends Component {
             // onRightIconPressed={() => goToFromTab(2, "Options")}
           />
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            // left: 0,
-            // right: 0,
-            height: 100,
-            top: 100,
-            alignSelf: 'center',
-          }}
-        >
-          <AvatarImage />
-          <Text style={{ fontSize: 17, fontWeight: 'bold' }}>
-            {profile.full_name}
-          </Text>
-        </View>
+        {!state.isKeyboardAppear && (
+          <View
+            style={{
+              position: 'absolute',
+              // left: 0,
+              // right: 0,
+              height: 100,
+              top: 100,
+              alignSelf: 'center',
+            }}
+          >
+            <AvatarImage />
+            <Text style={{ fontSize: 17, fontWeight: 'bold' }}>
+              {profile.full_name}
+            </Text>
+          </View>
+        )}
 
-        <View style={styles.scrollView}>
+        <View
+          style={[
+            styles.scrollView,
+            { marginTop: state.isKeyboardAppear ? 30 : 140 },
+          ]}
+        >
           <View style={{ padding: 20 }}>
             <Text style={{ color: 'grey', marginVertical: 10 }}>
               Just enter your registered local mobile number, we'll send you the
@@ -80,10 +87,10 @@ export default class EnterPhoneScreen extends Component {
                   style={{ height: 20, width: 20, marginRight: 7 }}
                 />
                 <TextInput
-                  value={'+ ' + countryCode}
+                  value={countryCode}
                   maxLength={3}
-                  placeholder="+ 60"
-                  editable={false}
+                  placeholder="60"
+                  // editable={false}
                   style={[styles.textInput, { flex: 2 }]}
                   keyboardType="phone-pad"
                   onChangeText={countryCode => this.setState({ countryCode })}
@@ -95,7 +102,7 @@ export default class EnterPhoneScreen extends Component {
                   value={phone}
                   maxLength={9}
                   placeholder="e.g. : 01110001000"
-                  autoFocus
+                  // autoFocus
                   style={styles.textInput}
                   keyboardType="phone-pad"
                   onChangeText={phone => this.setState({ phone })}
@@ -189,7 +196,6 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    marginTop: 80,
     flex: 0.8,
   },
   header: {

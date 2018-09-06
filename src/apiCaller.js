@@ -81,27 +81,16 @@ class ApiCaller extends Component {
           if (state.amountToReload != 0) {
             action.callApi('post', 'paymentLink', {
               amount: state.amountToReload,
-              product_description: '',
+              product_description: 'I dont know why back end still need this',
             });
             action.set('amountToReload', 0);
           }
         } else {
-          const is_max = state.numberOfTrialEnteringTac >= 2;
           action.openModal({
-            title: is_max
-              ? "Oh no! You've reached maximum attempts"
-              : 'Yikes, seems like something went wrong!',
-            body: is_max
-              ? 'Just wait for 10 minutes and try again'
-              : "Hold on, could this be a case of fat fingers?\nLet's try that code again one more time?",
+            title: 'Yikes, seems like something went wrong!',
+            body:
+              "Hold on, could this be a case of fat fingers?\nLet's try that code again one more time?",
           });
-          if (is_max) {
-            setTimeout(
-              () => action.set('numberOfTrialEnteringTac', 0),
-              60 * 1000 * 10,
-            );
-            break;
-          }
           action.set(
             'numberOfTrialEnteringTac',
             state.numberOfTrialEnteringTac + 1,
@@ -179,6 +168,20 @@ class ApiCaller extends Component {
 
   callApi = (method, route, body = {}) => {
     if (method == null) return;
+    const { store } = this.props;
+    const is_max = store.state.numberOfTrialEnteringTac >= 2;
+
+    if (route == 'verifyTac' && is_max) {
+      store.action.openModal({
+        title: "Oh no! You've reached maximum attempts",
+        body: 'Just wait for 10 minutes and try again',
+      });
+      setTimeout(
+        () => store.action.set('numberOfTrialEnteringTac', 0),
+        60 * 1000 * 10,
+      );
+      return;
+    }
     url = route;
     if (endPoints[url] != null) {
       // const channel = 'APP';
