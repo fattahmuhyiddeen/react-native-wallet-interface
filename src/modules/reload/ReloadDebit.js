@@ -32,7 +32,7 @@ class ReloadDebit extends Component {
     }
     store.action.callApi('post', 'paymentLink', {
       amount,
-      product_description: 'I dont know why back end still need this',
+      product_description: '',
     });
     // ajax.post("paymentLink");
   };

@@ -1,22 +1,22 @@
-import { Component } from 'react';
-import { Platform, Alert } from 'react-native';
+import { Component } from "react";
+import { Platform, Alert } from "react-native";
 
 const endPoints = {
-  checkBalance: 'cls/wallet/get-balance',
-  checkPaymentStatus: 'cls/wifi/payment/check_status',
-  paymentLink: 'cls/wifi/payment/create_link',
-  walletRegister: 'ums/wallet/register',
-  verifyTac: 'ums/wallet/verify-tac',
-  resendTac: 'ums/wallet/resend-tac',
-  getProfile: 'ums/user/profile',
-  getReloadHistory: `cls/wallet/get-history?channel=${Platform.OS}`,
+  checkBalance: "cls/wallet/get-balance",
+  checkPaymentStatus: "cls/wifi/payment/check_status",
+  paymentLink: "cls/wifi/payment/create_link",
+  walletRegister: "ums/wallet/register",
+  verifyTac: "ums/wallet/verify-tac",
+  resendTac: "ums/wallet/resend-tac",
+  getProfile: "ums/user/profile",
+  getReloadHistory: `cls/wallet/get-history?channel=${Platform.OS}`
 };
 
 class ApiCaller extends Component {
   response = (
     url,
     isSuccess,
-    data = { error_message: 'Generic error message' },
+    data = { error_message: "Generic error message" }
   ) => {
     // alert(JSON.stringify(data));
     data = isSuccess ? data.response : data.error_message;
@@ -26,126 +26,126 @@ class ApiCaller extends Component {
 
     const { setBalance, setReloadHistory } = action;
     switch (url) {
-      case 'getReloadHistory':
+      case "getReloadHistory":
         if (isSuccess) {
           setReloadHistory(data.trans_list);
         } else {
         }
         break;
-      case 'checkBalance':
-        action.set('loadingBalance', false);
+      case "checkBalance":
+        action.set("loadingBalance", false);
         if (isSuccess) {
           setBalance((data.balance / 100).toFixed(2));
-          action.set('hasWallet', true);
+          action.set("hasWallet", true);
         } else {
-          action.set('hasWallet', false);
+          action.set("hasWallet", false);
         }
         break;
 
-      case 'paymentLink':
+      case "paymentLink":
         if (isSuccess) {
-          navigate('WebView', {
+          navigate("WebView", {
             url: data.url,
-            title: 'Reload',
-            payment_ref_no: data.payment_ref_no,
+            title: "Reload",
+            payment_ref_no: data.payment_ref_no
           });
         } else {
           // alert('Fail to reload');
           action.openModal({
-            title: 'Sorry, something weird happened',
-            body: 'Please try again later',
+            title: "Sorry, something weird happened",
+            body: "Please try again later"
           });
         }
         break;
 
-      case 'walletRegister':
+      case "walletRegister":
         if (isSuccess) {
           // alert("succes");
-          navigate('EnterTac');
+          navigate("EnterTac");
         } else {
           // alert('Fail to call tac');
           action.openModal({
-            title: 'Sorry, something weird happened',
-            body: 'Please try again later',
+            title: "Sorry, something weird happened",
+            body: "Please try again later"
           });
         }
         break;
 
-      case 'verifyTac':
+      case "verifyTac":
         if (isSuccess) {
           // alert(JSON.stringify(data));
           // alert("succes");
-          action.set('hasWallet', true);
-          action.set('numberOfTrialEnteringTac', 0);
-          reset('Reload');
+          action.set("hasWallet", true);
+          action.set("numberOfTrialEnteringTac", 0);
+          reset("Reload");
           if (state.amountToReload != 0) {
-            action.callApi('post', 'paymentLink', {
+            action.callApi("post", "paymentLink", {
               amount: state.amountToReload,
-              product_description: 'I dont know why back end still need this',
+              product_description: ""
             });
-            action.set('amountToReload', 0);
+            action.set("amountToReload", 0);
           }
         } else {
           action.openModal({
-            title: 'Yikes, seems like something went wrong!',
+            title: "Yikes, seems like something went wrong!",
             body:
-              "Hold on, could this be a case of fat fingers?\nLet's try that code again one more time?",
+              "Hold on, could this be a case of fat fingers?\nLet's try that code again one more time?"
           });
           action.set(
-            'numberOfTrialEnteringTac',
-            state.numberOfTrialEnteringTac + 1,
+            "numberOfTrialEnteringTac",
+            state.numberOfTrialEnteringTac + 1
           );
           // alert('Fail to verify tac');
         }
         break;
 
-      case 'resendTac':
-        action.set('numberOfTrialEnteringTac', 0);
+      case "resendTac":
+        action.set("numberOfTrialEnteringTac", 0);
 
         if (isSuccess) {
           // alert(JSON.stringify(data));
           // alert('New TAC code has been successfully generated');
           action.openModal({
-            title: 'Code has been resent',
+            title: "Code has been resent",
             body:
-              "3 minutes are too long without you! We know you missed us, so we sent the code to you via sms again to remind you we're here",
+              "3 minutes are too long without you! We know you missed us, so we sent the code to you via sms again to remind you we're here"
           });
         } else {
           // alert('Fail to resend tac');
           action.openModal({
-            title: 'Sorry, something weird happened',
-            body: 'Please try again later',
+            title: "Sorry, something weird happened",
+            body: "Please try again later"
           });
         }
         break;
-      case 'getProfile':
+      case "getProfile":
         if (isSuccess) {
           // alert(JSON.stringify(data));
-          action.set('profile', data);
+          action.set("profile", data);
           action.set(
-            'hasWallet',
-            typeof data.wallet_id !== 'undefined' && data.wallet_id != null,
+            "hasWallet",
+            typeof data.wallet_id !== "undefined" && data.wallet_id != null
           );
         } else {
           // alert('Fail to get profile');
         }
         break;
 
-      case 'checkPaymentStatus':
+      case "checkPaymentStatus":
         if (isSuccess) {
           let scenario = data.payment_status.toLowerCase();
           let amount = data.amount;
-          if (scenario == 'processing') return;
-          if (scenario == 'completed') {
-            scenario = 'success';
+          if (scenario == "processing") return;
+          if (scenario == "completed") {
+            scenario = "success";
           }
-          if (scenario == 'success' && store.select.balance() == 0) {
-            scenario = 'first_success';
+          if (scenario == "success" && store.select.balance() == 0) {
+            scenario = "first_success";
           } else {
             amount = 0;
           }
           action.apiCheckBalance();
-          navigate('ReloadNotification', { scenario, amount });
+          navigate("ReloadNotification", { scenario, amount });
         } else {
           // setTimeout(()=>);
         }
@@ -159,8 +159,8 @@ class ApiCaller extends Component {
     for (let i = 0; i < arrs.length; i++) {
       const payment_ref_no = arrs[i];
       setTimeout(
-        () => this.callApi('post', 'checkPaymentStatus', { payment_ref_no }),
-        3000,
+        () => this.callApi("post", "checkPaymentStatus", { payment_ref_no }),
+        3000
       );
       store.action.remove_payment_ref_no(payment_ref_no);
     }
@@ -171,14 +171,14 @@ class ApiCaller extends Component {
     const { store } = this.props;
     const is_max = store.state.numberOfTrialEnteringTac >= 2;
 
-    if (route == 'verifyTac' && is_max) {
+    if (route == "verifyTac" && is_max) {
       store.action.openModal({
         title: "Oh no! You've reached maximum attempts",
-        body: 'Just wait for 10 minutes and try again',
+        body: "Just wait for 10 minutes and try again"
       });
       setTimeout(
-        () => store.action.set('numberOfTrialEnteringTac', 0),
-        60 * 1000 * 10,
+        () => store.action.set("numberOfTrialEnteringTac", 0),
+        60 * 1000 * 10
       );
       return;
     }
@@ -187,7 +187,7 @@ class ApiCaller extends Component {
       // const channel = 'APP';
       const channel = Platform.OS.toUpperCase();
       url = `${this.props.store.state.baseApiURL}/${endPoints[url]}`;
-      if (method === 'get') {
+      if (method === "get") {
         url += `?channel=${channel}`;
       } else {
         body = { ...body, channel };
@@ -197,9 +197,9 @@ class ApiCaller extends Component {
     // if (__DEV__) {
     console.log(`url :${url}`);
     console.log(`method :${method}`);
-    console.log('params :');
+    console.log("params :");
     console.log(body);
-    console.log('token :');
+    console.log("token :");
     console.log(this.props.store.state.token);
     // }
 
@@ -237,12 +237,12 @@ class ApiCaller extends Component {
 
     request.open(method.toUpperCase(), url);
     request.setRequestHeader(
-      'Authorization',
-      `Bearer ${this.props.store.state.token}`,
+      "Authorization",
+      `Bearer ${this.props.store.state.token}`
     );
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('Accept', 'application/json');
-    request.send(method === 'get' ? null : JSON.stringify(body));
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Accept", "application/json");
+    request.send(method === "get" ? null : JSON.stringify(body));
   };
   render() {
     return null;
