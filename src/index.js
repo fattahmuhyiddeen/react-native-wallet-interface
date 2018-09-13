@@ -222,15 +222,22 @@ class App extends Component {
   render() {
     // if (__DEV__)
     console.log(this.state);
+    const { routes, modal, balance, wallet_credit_limit } = this.state;
     const { presetReloadAmount } = this.props;
-    const { routes, modal } = this.state;
+    const tempPreset = [];
+    for (let i = 0; i < presetReloadAmount.length; i++) {
+      if (parseInt(balance) + parseInt(presetReloadAmount[i].amount) <= parseInt(wallet_credit_limit)) {
+        tempPreset.push(presetReloadAmount[i])
+      }
+
+    }
     const screens = [];
     const store = {
       navigation: this.navigation,
       state: this.state,
       select: this.select,
       action: this.action,
-      presetReloadAmount,
+      presetReloadAmount: tempPreset,
     };
     for (let i = 0; i < routes.length; i += 1) {
       const s = (
