@@ -35,7 +35,7 @@ class ApiCaller extends Component {
       case "checkBalance":
         action.set("loadingBalance", false);
         if (isSuccess) {
-          setBalance((data.balance / 100).toFixed(2));
+          setBalance((data.balance / 100).toFixed(2), (data.wallet_credit_limit / 100).toFixed(2));
           action.set("hasWallet", true);
         } else {
           action.set("hasWallet", false);

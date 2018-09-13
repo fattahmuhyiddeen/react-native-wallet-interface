@@ -35,21 +35,6 @@ class App extends Component {
       'keyboard' + (isIos ? 'Will' : 'Did') + 'Hide',
       this.onKeyboardHide,
     );
-    // setTimeout(this.action.openModal, 2000);
-
-    // globalState.setState(this.state);
-    // ajax.get("https://facebook.github.io/react-native/movies.json");
-
-    // setTimeout(
-    // () =>
-    //   ajax.post(
-    //     "paymentLink",
-    //     { amount: "10", product_description: "reload" },
-    //     v => self.action.setBalance(v)
-    //   ),
-    // () => ajax.post("checkBalance", {}, v => self.action.setBalance(v)),
-    //   0
-    // );
   }
 
   onKeyboardAppear = e =>
@@ -92,6 +77,7 @@ class App extends Component {
     themeColor: this.props.themeColor,
     currency: this.props.currency,
     balance: this.props.initialBalance,
+    wallet_credit_limit: 99999999,
     loadingBalance: true,
     screen: {
       reloadNotification: {
@@ -174,9 +160,9 @@ class App extends Component {
         modal: { ...this.initialModalState(), ...data, isVisible: true },
       }),
     set: (s, v) => this.setState({ [s]: v }),
-    setBalance: balance => {
+    setBalance: (balance, wallet_credit_limit) => {
       this.checkReloadHistory();
-      this.setState({ balance });
+      this.setState({ balance, wallet_credit_limit });
       this.props.onBalanceChanged(balance);
     },
     setReloadHistory: data => {
@@ -266,7 +252,7 @@ class App extends Component {
           transparent
           animationType="fade"
           onRequestClose={this.resetModal}
-          // onDismiss={}
+        // onDismiss={}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalBody}>
